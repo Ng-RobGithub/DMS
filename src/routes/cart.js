@@ -1,26 +1,11 @@
+// src/routes/cart.js
 const express = require('express');
-const router = express.Router();
+const { getCart, addToCart, clearCart } = require('../controllers/cartController');
 const auth = require('../middleware/auth');
-const cartController = require('../controllers/cartController');
+const router = express.Router();
 
-// @route    POST api/cart
-// @desc     Add product to cart
-// @access   Private
-router.post('/', auth, cartController.addToCart);
-
-// @route    GET api/cart
-// @desc     View cart
-// @access   Private
-router.get('/', auth, cartController.viewCart);
-
-// @route    POST api/cart/schedule
-// @desc     Schedule delivery
-// @access   Private
-router.post('/schedule', auth, cartController.scheduleDelivery);
-
-// @route    PUT api/cart/status
-// @desc     Update order status (checkout, save, cancel)
-// @access   Private
-router.put('/status', auth, cartController.updateOrderStatus);
+router.get('/', auth, getCart);
+router.post('/', auth, addToCart);
+router.delete('/', auth, clearCart);
 
 module.exports = router;

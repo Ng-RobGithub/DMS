@@ -1,6 +1,6 @@
-// client/src/App.js
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import './App.css';
 import Cart from './components/Cart';
 import Dashboard from './components/Dashboard';
 import Orders from './components/Orders';
@@ -10,31 +10,31 @@ import Reports from './components/Reports';
 import Support from './components/Support';
 import FAQ from './components/FAQ';
 import Logout from './components/Logout';
-import Menus from './components/Menus'; // Import the Menus component
+import Menus from './components/Menus';
 
 const user = {
   name: 'John Doe',
-  photo: 'path/to/profile/photo.jpg' // Replace with actual path to the profile photo
+  photo: 'path/to/profile/photo.jpg'
 };
 
 const App = () => {
   return (
     <Router>
       <div className="app">
-        <Menus user={user} /> {/* Include the Menus component */}
+        <Menus user={user} />
         <div className="main-content">
-          <Switch>
-            <Route path="/dashboard" component={Dashboard} />
-            <Route path="/orders" component={Orders} />
-            <Route path="/wallet-statement" component={WalletStatement} />
-            <Route path="/products" component={Products} />
-            <Route path="/cart" component={Cart} />
-            <Route path="/reports" component={Reports} />
-            <Route path="/support" component={Support} />
-            <Route path="/faq" component={FAQ} />
-            <Route path="/logout" component={Logout} />
-            {/* Define other routes here */}
-          </Switch>
+          <Routes>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/wallet-statement" element={<WalletStatement />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/support" element={<Support />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/logout" element={<Logout />} />
+            <Route path="/" element={<Dashboard />} />
+          </Routes>
         </div>
       </div>
     </Router>

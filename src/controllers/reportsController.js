@@ -3,7 +3,7 @@ const {
   InvoiceList,
   Invoice,
   ReportByProducts
-} = require('../models/reportsModel');
+} = require('../models/reports');
 
 exports.getCustomerStatements = async (req, res) => {
   try {

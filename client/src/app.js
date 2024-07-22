@@ -1,3 +1,4 @@
+// client/src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
@@ -11,6 +12,7 @@ import Support from './components/Support';
 import FAQ from './components/FAQ';
 import Logout from './components/Logout';
 import Menus from './components/Menus';
+import DeliveryDetails from './components/DeliveryDetails'; // Import the new component
 
 const user = {
   name: 'John Doe',
@@ -24,6 +26,7 @@ const App = () => {
         <Menus user={user} />
         <div className="main-content">
           <Routes>
+            <Route path="/" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/wallet-statement" element={<WalletStatement />} />
@@ -33,7 +36,7 @@ const App = () => {
             <Route path="/support" element={<Support />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/logout" element={<Logout />} />
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/delivery-details" element={<DeliveryDetails />} /> {/* Add this line */}
           </Routes>
         </div>
       </div>

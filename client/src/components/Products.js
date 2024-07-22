@@ -1,17 +1,24 @@
-// client/src/components/products.js
+// client/src/components/Products.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const Products = () => {
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
     const [message, setMessage] = useState('');
+    const [deliveryMethod, setDeliveryMethod] = useState('');
+    const navigate = useNavigate(); // Initialize useNavigate
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_API_URL}/products`);
-                setProducts(response.data);
+                if (Array.isArray(response.data)) {
+                    setProducts(response.data);
+                } else {
+                    console.error('API response is not an array:', response.data);
+                }
             } catch (err) {
                 console.error(err);
             }
@@ -43,9 +50,26 @@ const Products = () => {
         // Logic for proceeding to checkout
     };
 
+    const handleDeliveryMethodChange = (event) => {
+        const method = event.target.value;
+        setDeliveryMethod(method);
+        if (method) {
+            navigate('/delivery-details', { state: { deliveryMethod: method } }); // Navigate to delivery details page
+        }
+    };
+
     return (
         <div>
             <h1>Products</h1>
+            <label>
+                Select Delivery Method:
+                <select value={deliveryMethod} onChange={handleDeliveryMethodChange}>
+                    <option value="">Select a method</option>
+                    <option value="Plant/Direct Delivery by NG-ROB">Plant/Direct Delivery by NG-ROB</option>
+                    <option value="Self-Collection by Customer">Self-Collection by Customer</option>
+                    <option value="CTES/CTES Plus">CTES/CTES Plus</option>
+                </select>
+            </label>
             <div>
                 {products.map((product) => (
                     <div key={product._id}>

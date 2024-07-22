@@ -1,7 +1,7 @@
 // src/controllers/authController.js
 
-const User = require('../models/userModel');
-const Auth = require('../models/authModel');
+const User = require('../models/user');
+const Auth = require('../models/auth');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');

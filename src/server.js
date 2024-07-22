@@ -6,7 +6,7 @@ require('dotenv').config();
 
 const app = express();
 
-// Database connection and middleware setup
+// Database connection
 connectDB();
 
 // Init Middleware
@@ -24,6 +24,7 @@ app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/cart', require('./routes/cart'));
 app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 app.use('/api/reports', require('./routes/reportRoutes'));
+app.use('/api/delivery', require('./routes/deliveryRoutes'));
 
 // The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
 app.get('*', (req, res) => {

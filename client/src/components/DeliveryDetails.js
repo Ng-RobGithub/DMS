@@ -1,26 +1,25 @@
+// client/src/components/DeliveryDetails.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const DeliveryDetails = () => {
     const [countries, setCountries] = useState([]);
     const [states, setStates] = useState([]);
     const [account, setAccount] = useState('');
     const [plant, setPlant] = useState('');
-    const [deliveryMethod, setDeliveryMethod] = useState('');
     const [selectedCountry, setSelectedCountry] = useState('');
     const [selectedState, setSelectedState] = useState('');
 
-    const location = useLocation();
-    const query = new URLSearchParams(location.search);
-    const method = query.get('method');
+    //const location = useLocation();
+    const navigate = useNavigate();
+    //const { deliveryMethod } = location.state;
 
     useEffect(() => {
-        setDeliveryMethod(method);
         // Fetch countries from API
         const fetchCountries = async () => {
             try {
-                const response = await axios.get('/api/delivery/countries'); // Adjust this endpoint
+                const response = await axios.get('/api/delivery/countries');
                 if (Array.isArray(response.data)) {
                     setCountries(response.data);
                 } else {
@@ -32,14 +31,14 @@ const DeliveryDetails = () => {
         };
 
         fetchCountries();
-    }, [method]);
+    }, []);
 
     useEffect(() => {
         if (selectedCountry) {
             // Fetch states based on the selected country
             const fetchStates = async () => {
                 try {
-                    const response = await axios.get(`/api/delivery/states/${selectedCountry}`); // Adjust this endpoint
+                    const response = await axios.get(`/api/delivery/states/${selectedCountry}`);
                     if (Array.isArray(response.data)) {
                         setStates(response.data);
                     } else {
@@ -55,7 +54,7 @@ const DeliveryDetails = () => {
     }, [selectedCountry]);
 
     const handleProceed = () => {
-        // Handle the proceed action
+        navigate('/product-brands');
     };
 
     return (
@@ -67,7 +66,6 @@ const DeliveryDetails = () => {
                     <select value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)}>
                         <option value="">Select a country</option>
                         <option value="Nigeria">Nigeria</option>
-                        {/* Add other countries here */}
                         {countries.map((country) => (
                             <option key={country} value={country}>{country}</option>
                         ))}
@@ -84,14 +82,13 @@ const DeliveryDetails = () => {
                         <option value="Akwa Ibom">Akwa Ibom</option>
                         <option value="Anambra">Anambra</option>
                         <option value="Bauchi">Bauchi</option>
-                        <option value="Benue">Benue</option>
                         <option value="Bayelsa">Bayelsa</option>
-                        <option value="Cross River">Coss River</option>
+                        <option value="Benue">Benue</option>
                         <option value="Delta">Delta</option>
-                        <option value="Imo">Imo</option>
-                        <option value="Lagos">Lagos</option>
                         <option value="Rivers">Rivers</option>
-                        {/* Add other states here */}
+                        <option value="Cross River">Cross River</option>
+                        <option value="Lagos">Lagos</option>
+                        <option value="Imo">Imo</option>
                         {states.map((state) => (
                             <option key={state} value={state}>{state}</option>
                         ))}
@@ -102,7 +99,6 @@ const DeliveryDetails = () => {
                 <label>
                     Customer Account:
                     <select value={account} onChange={(e) => setAccount(e.target.value)}>
-                        {/* Fetch and map customer accounts here */}
                         <option value="Account1">Account1</option>
                         <option value="Account2">Account2</option>
                     </select>
@@ -112,7 +108,6 @@ const DeliveryDetails = () => {
                 <label>
                     Plant/Depot:
                     <select value={plant} onChange={(e) => setPlant(e.target.value)}>
-                        {/* List all production plants/depots here */}
                         <option value="Ibese">Ibese</option>
                         <option value="Obajana">Obajana</option>
                         <option value="Okpella">Okpella</option>
@@ -126,7 +121,6 @@ const DeliveryDetails = () => {
                         <option value="Lekki">Lekki</option>
                         <option value="Oniru">Oniru</option>
                         <option value="Ikorodu">Ikorodu</option>
-                        {/* Add more options */}
                     </select>
                 </label>
             </div>

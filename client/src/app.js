@@ -12,7 +12,9 @@ import Support from './components/Support';
 import FAQ from './components/FAQ';
 import Logout from './components/Logout';
 import Menus from './components/Menus';
-import DeliveryDetails from './components/DeliveryDetails'; // Import the new component
+import DeliveryDetails from './components/DeliveryDetails';
+import ProductBrands from './components/ProductBrands'; // Import the ProductBrands component
+import ProductDetails from './components/ProductDetails'; // Import the ProductDescription component
 
 const user = {
   name: 'John Doe',
@@ -36,7 +38,9 @@ const App = () => {
             <Route path="/support" element={<Support />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/logout" element={<Logout />} />
-            <Route path="/delivery-details" element={<DeliveryDetails />} /> {/* Add this line */}
+            <Route path="/delivery-details" element={<DeliveryDetails />} />
+            <Route path="/product-brands" element={<ProductBrands />} />
+            <Route path="/product-details" element={<ProductDetails />} /> {/* Add this line */}
           </Routes>
         </div>
       </div>

@@ -1,7 +1,10 @@
 // client/src/App.js
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
+import Register from './components/Register';
+import Home from './components/Home';
+import Login from './components/Login';
 import Cart from './components/Cart';
 import Dashboard from './components/Dashboard';
 import Orders from './components/Orders';
@@ -18,6 +21,7 @@ import ProductDetails from './components/ProductDetails'; // Import the ProductD
 import OrderSummary from './components/OrderSummary';
 import ScheduleDelivery from './components/ScheduleDelivery';
 import ScheduleDeliverySummary from './components/ScheduleDeliverySummary';
+import PrivacyPolicy from './components/PrivacyPolicy'; // Import the PrivacyPolicy component
 
 const user = {
   name: 'John Doe',
@@ -25,13 +29,26 @@ const user = {
 };
 
 const App = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Check if user is authenticated
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
   return (
     <Router>
       <div className="app">
         <Menus user={user} />
         <div className="main-content">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/wallet-statement" element={<WalletStatement />} />
@@ -47,7 +64,7 @@ const App = () => {
             <Route path="/order-summary" element={<OrderSummary />} />
             <Route path="/schedule-delivery" element={<ScheduleDelivery />} />
             <Route path="/schedule-delivery-summary" element={<ScheduleDeliverySummary />} />
-            {/* Add this line */}
+            <Route path="*" element={isAuthenticated ? <Navigate to="/" /> : <Navigate to="/login" />} />
           </Routes>
         </div>
       </div>

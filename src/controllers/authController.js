@@ -1,90 +1,108 @@
 // src/controllers/authController.js
-
-const User = require('../models/user');
-const Auth = require('../models/auth');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { check, validationResult } = require('express-validator');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+const User = require('../models/User');
+const OTP = require('../models/OTP');
 
-// User Registration
-exports.register = async (req, res) => {
-  const { name, email, password } = req.body;
-
-  try {
-    let user = await User.findOne({ email });
-
-    if (user) {
-      return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
     }
+});
 
-    user = new User({
-      name,
-      email,
-      password,
-    });
+const registerUser = async (req, res) => {
+    const { fullName, email, phoneNumber, country, company, customerId, password } = req.body;
 
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
+    try {
+        let user = await User.findOne({ email });
+        if (user) {
+            return res.status(400).json({ msg: 'User already exists' });
+        }
 
-    await user.save();
+        user = new User({
+            fullName,
+            email,
+            phoneNumber,
+            country,
+            company,
+            customerId,
+            password
+        });
 
-    const payload = {
-      user: {
-        id: user.id,
-      },
-    };
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(password, salt);
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
+        await user.save();
 
-    const auth = new Auth({
-      user: user.id,
-      token: token,
-    });
+        // Generate OTP
+        const otp = crypto.randomInt(100000, 999999).toString();
+        const expiry = new Date(Date.now() + 4 * 60 * 1000); // 4 minutes from now
 
-    await auth.save();
+        const newOtp = new OTP({
+            email,
+            otp,
+            expiry
+        });
 
-    res.json({ token });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
-  }
+        await newOtp.save();
+
+        // Send OTP email
+        await transporter.sendMail({
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Your OTP Code',
+            text: `Your OTP code is: ${otp}`
+        });
+
+        res.status(200).json({ message: 'User registered and OTP sent' });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Server error');
+    }
 };
 
-// User Login
-exports.login = async (req, res) => {
-  const { email, password } = req.body;
+const loginUser = async (req, res) => {
+    const { email, password } = req.body;
 
-  try {
-    let user = await User.findOne({ email });
+    try {
+        const user = await User.findOne({ email });
 
-    if (!user) {
-      return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
+        if (!user) {
+            return res.status(400).json({ msg: 'Invalid credentials' });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            return res.status(400).json({ msg: 'Invalid credentials' });
+        }
+
+        const payload = {
+            user: {
+                id: user.id
+            }
+        };
+
+        jwt.sign(
+            payload,
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' },
+            (err, token) => {
+                if (err) throw err;
+                res.json({ token });
+            }
+        );
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Server error');
     }
+};
 
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
-    }
-
-    const payload = {
-      user: {
-        id: user.id,
-      },
-    };
-
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
-
-    const auth = new Auth({
-      user: user.id,
-      token: token,
-    });
-
-    await auth.save();
-
-    res.json({ token });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
-  }
+module.exports = {
+    registerUser,
+    loginUser
 };

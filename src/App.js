@@ -1,12 +1,12 @@
 const express = require('express');
-const connectDB = require('../../src/config/db');
-const authRoutes = require('../../src/routes/authRoutes');
+const connectDB = require('./config/db');
+const authRoutes = require('./routes/authRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const orderRoutes = require('./routes/orderRoutes');
-const reportsRoutes = require('../../src/routes/reportsRoutes');
-const productRoutes = require('../../src/routes/productRoutes');
+const reportsRoutes = require('./routes/reportsRoutes');
+const productRoutes = require('./routes/productRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
-const otpRoutes = require('./routes/otpRoutes'); // Import the OTP routes
+const otpRoutes = require('./routes/otpRoutes'); // Import the combined OTP routes
 const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
@@ -24,7 +24,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/reports', reportsRoutes);
 app.use('/api/dashboard', dashboardRoutes);
-app.use('/api/otp', otpRoutes); // Add the OTP routes
+app.use('/api/otp', otpRoutes); // Use the combined OTP routes
 
 // Error Handler Middleware
 app.use(errorHandler);

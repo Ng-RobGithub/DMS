@@ -24,14 +24,14 @@ app.use('/api/cart', require('./routes/cart'));
 app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 app.use('/api/reports', require('./routes/reportRoutes'));
 app.use('/api/delivery', require('./routes/deliveryRoutes'));
-app.use('/api/otp', require('./routes/otpRoutes')); // Add this line
+app.use('/api/otp', require('./routes/otpRoutes')); // Use the combined OTP routes
 
 // The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+    res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+    console.log(`Server is running on port ${port}`);
 });

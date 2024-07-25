@@ -1,10 +1,12 @@
 // client/src/components/ProductBrands.js
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const ProductBrands = () => {
     const [searchTerm, setSearchTerm] = useState('');
-    const navigate = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { deliveryMethod, selectedCountry, selectedState, account, plant } = location.state || {};
 
     const productBrands = [
         "Blocmaster",
@@ -22,7 +24,7 @@ const ProductBrands = () => {
     );
 
     const handleBrandClick = (brand) => {
-        navigate('/product-details', { state: { brand } });
+        navigate('/product-details', { state: { brand, deliveryMethod, selectedCountry, selectedState, account, plant } });
     };
 
     return (
@@ -41,6 +43,8 @@ const ProductBrands = () => {
                     </li>
                 ))}
             </ul>
+            <button onClick={() => navigate(-1)}>&lt;&lt; Back</button>
+            <button onClick={() => navigate('/')}>Cancel</button>
         </div>
     );
 };

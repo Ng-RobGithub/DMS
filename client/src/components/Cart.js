@@ -1,47 +1,79 @@
-// client/src/components/Cart.js
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import './Cart.css'; // Import the CSS for styling
 
 const Cart = () => {
-  const [cart, setCart] = useState({
-    currentWalletBalance: 0,
-    remainingBalance: 0,
-    totalPrice: 0,
-    items: [],
-  });
+    const navigate = useNavigate();
+    
+    const [cart, setCart] = useState([]);
+    const walletBalance = parseFloat(localStorage.getItem('walletBalance')) || 10000000; // Retrieve wallet balance from localStorage or use default
+    const [totalPrice, setTotalPrice] = useState(0);
 
-  useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const response = await axios.get('/api/cart');
-        setCart(response.data);
-      } catch (error) {
-        console.error(error);
-      }
+    useEffect(() => {
+        const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
+        setCart(savedCart);
+        const total = savedCart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+        setTotalPrice(total);
+    }, []);
+
+    const remainingBalance = walletBalance - totalPrice;
+
+    const handleDelete = (index) => {
+        const updatedCart = cart.filter((_, i) => i !== index);
+        setCart(updatedCart);
+        localStorage.setItem('cart', JSON.stringify(updatedCart));
+        const total = updatedCart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+        setTotalPrice(total);
     };
 
-    fetchCart();
-  }, []);
+    const handleSave = () => {
+        console.log('Save the cart');
+    };
 
-  const handleProceed = async () => {
-    try {
-      // Proceed with the order
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    const handleScheduleDelivery = () => {
+        navigate('/schedule-delivery');
+    };
 
-  return (
-    <div>
-      <h1>Cart</h1>
-      <div>
-        <p>Current Wallet Balance: {cart.currentWalletBalance}</p>
-        <p>Remaining Balance: {cart.remainingBalance}</p>
-        <p>Total Price: {cart.totalPrice}</p>
-      </div>
-      <button onClick={handleProceed}>Proceed</button>
-    </div>
-  );
+    const handleCancel = () => {
+        navigate('/');
+    };
+
+    const handleBack = () => {
+        navigate(-1); // Navigate to the previous page
+    };
+
+    return (
+        <div className="cart-container">
+            <h1>Cart</h1>
+            <p>Current Wallet Balance: NGN {walletBalance.toFixed(2)}</p>
+            <p>Remaining Balance: NGN {remainingBalance >= 0 ? remainingBalance.toFixed(2) : 0}</p>
+            {cart.length > 0 ? (
+                <div className="cart-items">
+                    <h2>Cart Items</h2>
+                    <ul>
+                        {cart.map((item, index) => (
+                            <li key={index} className="cart-item">
+                                <p>Product Brand: {item.brand}</p>
+                                <p>Quantity Ordered: {item.quantity}</p>
+                                <p>Total Price: NGN {item.price * item.quantity}</p>
+                                <button onClick={() => handleDelete(index)} className="delete-button">Delete</button>
+                            </li>
+                        ))}
+                    </ul>
+                    <div className="cart-buttons">
+                        <button onClick={handleSave}>Save</button>
+                    </div>
+                </div>
+            ) : (
+                <p className="empty-cart">Your cart is empty.</p>
+            )}
+            <div className="cart-footer-buttons">
+                <button onClick={handleScheduleDelivery}>Schedule Delivery</button>
+                <button onClick={handleCancel}>Cancel</button>
+                <button onClick={handleBack}>{"<< Back"}</button>
+            </div>
+        </div>
+    );
 };
 
 export default Cart;

@@ -1,14 +1,14 @@
 // client/src/components/Products.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 
 const Products = () => {
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
     const [message, setMessage] = useState('');
     const [deliveryMethod, setDeliveryMethod] = useState('');
-    const navigate = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -29,7 +29,7 @@ const Products = () => {
 
     const addToCart = (product) => {
         setCart([...cart, { ...product, quantity: 1 }]);
-        setMessage('Order Successfully added to cart');
+        setMessage('Order successfully added to cart');
     };
 
     const increaseQuantity = (index) => {
@@ -46,15 +46,11 @@ const Products = () => {
         }
     };
 
-    const proceedToCheckout = () => {
-        // Logic for proceeding to checkout
-    };
-
     const handleDeliveryMethodChange = (event) => {
         const method = event.target.value;
         setDeliveryMethod(method);
         if (method) {
-            navigate('/delivery-details', { state: { deliveryMethod: method } }); // Navigate to delivery details page
+            navigate('/delivery-details', { state: { deliveryMethod: method } });
         }
     };
 
@@ -92,7 +88,9 @@ const Products = () => {
                         <button onClick={() => increaseQuantity(index)}>+</button>
                     </div>
                 ))}
-                <button onClick={proceedToCheckout}>Proceed</button>
+                <button onClick={() => navigate('/delivery-details', { state: { deliveryMethod } })}>Proceed</button>
+                <button onClick={() => navigate('/')}>&lt;&lt; Back</button>
+                <button onClick={() => navigate('/')} >Cancel</button>
             </div>
         </div>
     );

@@ -15,6 +15,9 @@ import Menus from './components/Menus';
 import DeliveryDetails from './components/DeliveryDetails';
 import ProductBrands from './components/ProductBrands'; // Import the ProductBrands component
 import ProductDetails from './components/ProductDetails'; // Import the ProductDescription component
+import OrderSummary from './components/OrderSummary';
+import ScheduleDelivery from './components/ScheduleDelivery';
+import ScheduleDeliverySummary from './components/ScheduleDeliverySummary';
 
 const user = {
   name: 'John Doe',
@@ -40,7 +43,11 @@ const App = () => {
             <Route path="/logout" element={<Logout />} />
             <Route path="/delivery-details" element={<DeliveryDetails />} />
             <Route path="/product-brands" element={<ProductBrands />} />
-            <Route path="/product-details" element={<ProductDetails />} /> {/* Add this line */}
+            <Route path="/product-details" element={<ProductDetails />} /> 
+            <Route path="/order-summary" element={<OrderSummary />} />
+            <Route path="/schedule-delivery" element={<ScheduleDelivery />} />
+            <Route path="/schedule-delivery-summary" element={<ScheduleDeliverySummary />} />
+            {/* Add this line */}
           </Routes>
         </div>
       </div>

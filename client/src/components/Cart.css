@@ -1,0 +1,71 @@
+/* client/src/components/Cart.css */
+.cart-container {
+    padding: 20px;
+}
+
+.cart-items {
+    margin: 20px 0;
+}
+
+.cart-item {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-item p {
+    margin: 5px 0;
+}
+
+.delete-button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
+
+.cart-buttons {
+    margin-top: 20px;
+}
+
+.cart-buttons button {
+    margin-right: 10px;
+    padding: 10px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+.cart-buttons button:hover {
+    background-color: #0056b3;
+}
+
+.cart-footer-buttons {
+    margin-top: 20px;
+}
+
+.cart-footer-buttons button {
+    margin-right: 10px;
+    padding: 10px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+.cart-footer-buttons button:hover {
+    background-color: #0056b3;
+}
+
+.empty-cart {
+    font-style: italic;
+}
+

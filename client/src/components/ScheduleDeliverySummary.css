@@ -1,0 +1,71 @@
+.schedule-delivery-summary-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-delivery-summary-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.summary {
+    margin-bottom: 20px;
+}
+
+.summary p {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.summary p strong {
+    font-weight: bold;
+}
+
+.summary-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.summary-buttons button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.summary-buttons button:hover {
+    background-color: #0056b3;
+}
+
+.summary-buttons button:focus,
+.summary-buttons button:active {
+    background-color: #004085;
+    outline: none;
+}
+
+@media (max-width: 600px) {
+    .schedule-delivery-summary-container {
+        padding: 15px;
+    }
+
+    .summary-buttons {
+        flex-direction: column;
+    }
+
+    .summary-buttons button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .summary-buttons button:last-child {
+        margin-bottom: 0;
+    }
+}

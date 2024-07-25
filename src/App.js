@@ -6,6 +6,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const reportsRoutes = require('../../src/routes/reportsRoutes');
 const productRoutes = require('../../src/routes/productRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
+const otpRoutes = require('./routes/otpRoutes'); // Import the OTP routes
 const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
@@ -23,6 +24,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/reports', reportsRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/otp', otpRoutes); // Add the OTP routes
 
 // Error Handler Middleware
 app.use(errorHandler);

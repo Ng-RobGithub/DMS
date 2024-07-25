@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const express = require('express');
 const connectDB = require('./config/db');
 const path = require('path');
@@ -25,6 +24,7 @@ app.use('/api/cart', require('./routes/cart'));
 app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 app.use('/api/reports', require('./routes/reportRoutes'));
 app.use('/api/delivery', require('./routes/deliveryRoutes'));
+app.use('/api/otp', require('./routes/otpRoutes')); // Add this line
 
 // The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
 app.get('*', (req, res) => {

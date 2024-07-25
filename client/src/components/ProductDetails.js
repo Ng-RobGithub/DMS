@@ -1,17 +1,21 @@
 // client/src/components/ProductDetails.js
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { productDetails } from '../Data/ProductMaps'; // Import the product details
+import { useLocation, useNavigate } from 'react-router-dom';
+import { productDetails } from '../data/ProductMaps';
+import { FaShoppingCart } from 'react-icons/fa';
+import './ProductDetails.css'; // Import CSS for styling
 
 const ProductDetails = () => {
     const { state } = useLocation();
     const { brand } = state || {};
+    const navigate = useNavigate();
 
     const [quantity, setQuantity] = useState(300);
     const [product, setProduct] = useState(null);
+    const [message, setMessage] = useState('');
+    const [isOrderAdded, setIsOrderAdded] = useState(false); // State to track if order was added
 
     useEffect(() => {
-        // Fetch the product details based on the brand
         if (brand) {
             const details = productDetails[brand];
             if (details) {
@@ -23,12 +27,24 @@ const ProductDetails = () => {
     }, [brand]);
 
     const handleQuantityChange = (amount) => {
-        setQuantity(prevQuantity => Math.max(prevQuantity + amount, 300)); // Ensure quantity is at least 1
+        setQuantity(prevQuantity => Math.max(prevQuantity + amount, 300));
     };
 
     const handleAddToCart = () => {
-        // Logic to add the product to the cart
-        console.log('Added to cart:', { brand, quantity });
+        try {
+            // Example of adding to cart - replace with actual logic
+            const cartItem = { brand, quantity, price: product.pricePerBag };
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.push(cartItem);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            setMessage('Order Successfully added to cart');
+            setIsOrderAdded(true); // Show the red dot
+        } catch (error) {
+            console.error('Error adding to cart:', error);
+            setMessage('Order cannot be added to cart, kindly contact your sales officer');
+            setIsOrderAdded(false); // Hide the red dot if there's an error
+        }
     };
 
     if (!product) {
@@ -40,6 +56,13 @@ const ProductDetails = () => {
 
     return (
         <div>
+            <div className="cart-icon-container">
+                <FaShoppingCart 
+                    className="cart-icon" 
+                    onClick={() => navigate('/cart')} // Navigate to cart on click
+                />
+                {isOrderAdded && <div className="notification-dot" onClick={() => navigate('/cart')}></div>} {/* Red dot */}
+            </div>
             <h1>Product Details</h1>
             <h2>{brand}</h2>
             <p>{description}</p>
@@ -51,6 +74,11 @@ const ProductDetails = () => {
             </div>
             <p>Total Price: NGN {totalPrice}</p>
             <button onClick={handleAddToCart}>Add to Cart</button>
+            {message && <p>{message}</p>}
+            <div>
+                <button onClick={() => navigate(-1)}>&lt;&lt; Back</button>
+                <button onClick={() => navigate('/')}>Cancel</button>
+            </div>
         </div>
     );
 };

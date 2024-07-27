@@ -25,51 +25,38 @@ const Register = () => {
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-    const registerUser = async e => {
-        e.preventDefault();
+    const sendOtp = async () => {
         try {
-            const registerResponse = await axios.post('/api/auth/register', {
-                fullName,
-                email,
-                phoneNumber,
-                country,
-                company,
-                customerId,
-                password
-            });
-
-            if (registerResponse.status === 200) {
-                // Send OTP after successful registration
-                const otpResponse = await axios.post('/api/otp/generate-otp', { email });
-
-                if (otpResponse.status === 200) {
-                    setOtpSent(true);
-                    alert('Registration successful! An OTP has been sent to your email.');
-                } else {
-                    alert('Failed to send OTP. Please try again.');
-                }
+            const otpResponse = await axios.post('http://localhost:5000/api/otp/generate', { email });
+            if (otpResponse.status === 200) {
+                setOtpSent(true);
+                alert('An OTP has been sent to your email.');
+            } else {
+                alert('Failed to send OTP. Please try again.');
             }
         } catch (error) {
-            console.error(error.response.data);
-            alert('Registration failed. Please try again.');
+            console.error(error.response ? error.response.data : error.message);
+            alert(error.response?.data?.message || 'Failed to send OTP. Please try again.');
         }
     };
 
     const verifyOtp = async e => {
         e.preventDefault();
         try {
-            const response = await axios.post('/api/otp/verify-otp', { email, otp });
+            const response = await axios.post('http://localhost:5000/api/otp/verify', { email, otp });
             if (response.status === 200) {
                 setOtpVerified(true);
-                alert('OTP verified successfully. You can now register.');
+                alert('OTP verified successfully. You can now complete the registration.');
+            } else {
+                alert('Invalid or expired OTP');
             }
         } catch (error) {
-            console.error(error.response.data);
-            alert('Invalid or expired OTP');
+            console.error(error.response ? error.response.data : error.message);
+            alert(error.response?.data?.message || 'Invalid or expired OTP');
         }
     };
 
-    const onSubmit = async e => {
+    const registerUser = async e => {
         e.preventDefault();
         if (password !== confirmPassword) {
             alert('Passwords do not match');
@@ -80,11 +67,21 @@ const Register = () => {
             return;
         }
         try {
-            await axios.post('/api/auth/register', { fullName, email, phoneNumber, country, company, customerId, password });
-            navigate('/login'); // Redirect to login page
+            const registerResponse = await axios.post('http://localhost:5000/api/auth/register', {
+                fullName,
+                email,
+                phoneNumber,
+                country,
+                company,
+                customerId,
+                password
+            });
+            if (registerResponse.status === 200) {
+                navigate('/login'); // Redirect to login page
+            }
         } catch (error) {
-            console.error(error.response.data);
-            alert('Registration failed. Please try again.');
+            console.error(error.response ? error.response.data : error.message);
+            alert(error.response?.data?.message || 'Registration failed. Please try again.');
         }
     };
 
@@ -187,8 +184,8 @@ const Register = () => {
                     <p className="privacy-policy">Click here to view and accept our <Link to="/privacy-policy">privacy policy</Link>.</p>
                     <button type="submit">{otpSent ? 'Verify OTP' : 'Register'}</button>
                 </form>
-                {otpVerified && (
-                    <form onSubmit={onSubmit}>
+                {otpVerified && !otpSent && (
+                    <form onSubmit={registerUser}>
                         <button type="submit">Confirm Registration</button>
                     </form>
                 )}

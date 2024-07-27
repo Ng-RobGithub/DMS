@@ -1,12 +1,19 @@
 const express = require('express');
+const cors = require('cors'); // Import the cors package
 const connectDB = require('./config/db');
 const path = require('path');
 require('dotenv').config();
+const app = require('./app'); // Import the app setup
 
 const app = express();
 
 // Database connection
 connectDB();
+
+// Use CORS middleware
+app.use(cors({
+    origin: 'http://localhost:3000' // Replace with your frontend URL
+}));
 
 // Init Middleware
 app.use(express.json());
@@ -31,7 +38,7 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
-const port = process.env.PORT || 5001;
+const port = process.env.PORT || 5000;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

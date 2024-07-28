@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import UserManagement from './UserManagement';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -22,7 +23,7 @@ const Users = () => {
       <h1>Users</h1>
       <ul>
         {users.map(user => (
-          <li key={user.id}>{user.name}</li>
+          <UserManagement key={user.email} user={user} setUsers={setUsers} />
         ))}
       </ul>
     </div>
@@ -30,3 +31,4 @@ const Users = () => {
 };
 
 export default Users;
+

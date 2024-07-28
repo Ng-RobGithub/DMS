@@ -21,7 +21,8 @@ import OrderSummary from './components/OrderSummary';
 import ScheduleDelivery from './components/ScheduleDelivery';
 import ScheduleDeliverySummary from './components/ScheduleDeliverySummary';
 import PrivacyPolicy from './components/PrivacyPolicy';
-import Profile from './components/Profile'; // Import the Profile component
+import Profile from './components/Profile';
+import Users from './components/Users'; // Import Users component
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -71,7 +72,8 @@ const App = () => {
             <Route path="/order-summary" element={<OrderSummary />} />
             <Route path="/schedule-delivery" element={<ScheduleDelivery />} />
             <Route path="/schedule-delivery-summary" element={<ScheduleDeliverySummary />} />
-            <Route path="/profile" element={<Profile updateUserProfile={updateUserProfile} />} /> {/* Add Profile Route */}
+            <Route path="/profile" element={<Profile updateUserProfile={updateUserProfile} />} />
+            <Route path="/users" element={<Users />} /> {/* Add Users Route */}
             <Route path="*" element={isAuthenticated ? <Navigate to="/" /> : <Navigate to="/login" />} />
           </Routes>
         </div>

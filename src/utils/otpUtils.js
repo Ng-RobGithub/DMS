@@ -12,9 +12,9 @@ const generateOTP = () => {
 // Send OTP via email
 const sendOtpEmail = async (email, otp) => {
     const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: parseInt(process.env.SMTP_PORT, 10),
-        secure: false, // true for 465, false for other ports
+        host: process.env.EMAIL_HOST,
+        port: parseInt(process.env.EMAIL_PORT, 10),
+        secure: process.env.EMAIL_PORT === '465', // true for 465, false for other ports
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS
@@ -22,7 +22,7 @@ const sendOtpEmail = async (email, otp) => {
     });
 
     const mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: process.env.EMAIL_FROM,
         to: email,
         subject: 'Your OTP Code',
         text: `Your OTP code is ${otp}.`

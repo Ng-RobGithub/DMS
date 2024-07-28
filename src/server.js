@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors'); // Import the cors package
+const cors = require('cors');
 const connectDB = require('./config/db'); // Correct path to db.js
 const path = require('path');
 
@@ -12,7 +12,7 @@ connectDB();
 
 // Use CORS middleware
 app.use(cors({
-    origin: 'http://localhost:3000' // Replace with your frontend URL
+    origin: 'http://localhost:3000' // Replace with your frontend URL if different
 }));
 
 // Init Middleware
@@ -38,7 +38,13 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
-const port = process.env.PORT || 5001;
+// Centralized error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+
+const port = process.env.PORT || 5002;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

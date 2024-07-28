@@ -1,4 +1,3 @@
-// src/models/User.js
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
@@ -15,8 +14,22 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    photo: {
+        type: String, // URL to the profile photo
+        default: ''
+    },
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user'
+    },
+    status: {
+        type: String,
+        enum: ['active', 'inactive'],
+        default: 'active'
     }
-});
+}, { timestamps: true });
 
 // Encrypt password before saving
 UserSchema.pre('save', async function(next) {

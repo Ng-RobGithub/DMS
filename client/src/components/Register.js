@@ -27,7 +27,7 @@ const Register = () => {
 
     const sendOtp = async () => {
         try {
-            const otpResponse = await axios.post('http://localhost:5000/api/otp/generate', { email });
+            const otpResponse = await axios.post('http://localhost:5000/api/otp/generate-otp', { email });
             if (otpResponse.status === 200) {
                 setOtpSent(true);
                 alert('An OTP has been sent to your email.');
@@ -40,10 +40,37 @@ const Register = () => {
         }
     };
 
+    const registerUser = async e => {
+        e.preventDefault();
+        if (password !== confirmPassword) {
+            alert('Passwords do not match');
+            return;
+        }
+
+        try {
+            const registerResponse = await axios.post('http://localhost:5000/api/auth/register', {
+                fullName,
+                email,
+                phoneNumber,
+                country,
+                company,
+                customerId,
+                password
+            });
+
+            if (registerResponse.status === 200) {
+                await sendOtp();
+            }
+        } catch (error) {
+            console.error(error.response ? error.response.data : error.message);
+            alert(error.response?.data?.message || 'Registration failed. Please try again.');
+        }
+    };
+
     const verifyOtp = async e => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/api/otp/verify', { email, otp });
+            const response = await axios.post('http://localhost:5000/api/otp/verify-otp', { email, otp });
             if (response.status === 200) {
                 setOtpVerified(true);
                 alert('OTP verified successfully. You can now complete the registration.');
@@ -56,32 +83,14 @@ const Register = () => {
         }
     };
 
-    const registerUser = async e => {
+    const completeRegistration = async e => {
         e.preventDefault();
-        if (password !== confirmPassword) {
-            alert('Passwords do not match');
-            return;
-        }
-        if (!otpVerified) {
-            alert('Please verify OTP first');
-            return;
-        }
         try {
-            const registerResponse = await axios.post('http://localhost:5000/api/auth/register', {
-                fullName,
-                email,
-                phoneNumber,
-                country,
-                company,
-                customerId,
-                password
-            });
-            if (registerResponse.status === 200) {
-                navigate('/login'); // Redirect to login page
-            }
+            // Perform any additional steps if needed after OTP verification
+            navigate('/login'); // Redirect to login page after successful registration
         } catch (error) {
             console.error(error.response ? error.response.data : error.message);
-            alert(error.response?.data?.message || 'Registration failed. Please try again.');
+            alert(error.response?.data?.message || 'Registration completion failed. Please try again.');
         }
     };
 
@@ -90,104 +99,110 @@ const Register = () => {
             <div className="register-container">
                 <h1>Register</h1>
                 <p>Kindly select your company and enter customer ID to register your account</p>
-                <form onSubmit={otpSent ? verifyOtp : registerUser}>
-                    <div>
-                        <input
-                            type="text"
-                            placeholder="Full Name"
-                            name="fullName"
-                            value={fullName}
-                            onChange={onChange}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <input
-                            type="email"
-                            placeholder="Email Address"
-                            name="email"
-                            value={email}
-                            onChange={onChange}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <input
-                            type="text"
-                            placeholder="Phone Number"
-                            name="phoneNumber"
-                            value={phoneNumber}
-                            onChange={onChange}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <select name="country" value={country} onChange={onChange} required>
-                            <option value="">Select Country</option>
-                            {africanCountries.map((country, index) => (
-                                <option key={index} value={country}>{country}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div>
-                        <input
-                            type="text"
-                            placeholder="Company"
-                            name="company"
-                            value={company}
-                            onChange={onChange}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <input
-                            type="text"
-                            placeholder="Customer I.D"
-                            name="customerId"
-                            value={customerId}
-                            onChange={onChange}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            name="password"
-                            value={password}
-                            onChange={onChange}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <input
-                            type="password"
-                            placeholder="Confirm Password"
-                            name="confirmPassword"
-                            value={confirmPassword}
-                            onChange={onChange}
-                            required
-                        />
-                    </div>
-                    {otpSent && (
+                {!otpSent ? (
+                    <form onSubmit={registerUser}>
                         <div>
                             <input
                                 type="text"
-                                placeholder="Enter OTP"
-                                name="otp"
-                                value={otp}
+                                placeholder="Full Name"
+                                name="fullName"
+                                value={fullName}
                                 onChange={onChange}
                                 required
                             />
                         </div>
-                    )}
-                    <p className="privacy-policy">Click here to view and accept our <Link to="/privacy-policy">privacy policy</Link>.</p>
-                    <button type="submit">{otpSent ? 'Verify OTP' : 'Register'}</button>
-                </form>
-                {otpVerified && !otpSent && (
-                    <form onSubmit={registerUser}>
-                        <button type="submit">Confirm Registration</button>
+                        <div>
+                            <input
+                                type="email"
+                                placeholder="Email Address"
+                                name="email"
+                                value={email}
+                                onChange={onChange}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <input
+                                type="text"
+                                placeholder="Phone Number"
+                                name="phoneNumber"
+                                value={phoneNumber}
+                                onChange={onChange}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <select name="country" value={country} onChange={onChange} required>
+                                <option value="">Select Country</option>
+                                {africanCountries.map((country, index) => (
+                                    <option key={index} value={country}>{country}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div>
+                            <input
+                                type="text"
+                                placeholder="Company"
+                                name="company"
+                                value={company}
+                                onChange={onChange}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <input
+                                type="text"
+                                placeholder="Customer I.D"
+                                name="customerId"
+                                value={customerId}
+                                onChange={onChange}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                name="password"
+                                value={password}
+                                onChange={onChange}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <input
+                                type="password"
+                                placeholder="Confirm Password"
+                                name="confirmPassword"
+                                value={confirmPassword}
+                                onChange={onChange}
+                                required
+                            />
+                        </div>
+                        <p className="privacy-policy">Click here to view and accept our <Link to="/privacy-policy">privacy policy</Link>.</p>
+                        <button type="submit">Register</button>
                     </form>
+                ) : (
+                    <>
+                        <form onSubmit={verifyOtp}>
+                            <div>
+                                <input
+                                    type="text"
+                                    placeholder="Enter OTP"
+                                    name="otp"
+                                    value={otp}
+                                    onChange={onChange}
+                                    required
+                                />
+                            </div>
+                            <button type="submit">Verify OTP</button>
+                        </form>
+                        {otpVerified && (
+                            <form onSubmit={completeRegistration}>
+                                <button type="submit">Complete Registration</button>
+                            </form>
+                        )}
+                    </>
                 )}
             </div>
         </div>

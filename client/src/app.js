@@ -1,4 +1,3 @@
-// client/src/App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
@@ -16,28 +15,36 @@ import FAQ from './components/FAQ';
 import Logout from './components/Logout';
 import Menus from './components/Menus';
 import DeliveryDetails from './components/DeliveryDetails';
-import ProductBrands from './components/ProductBrands'; // Import the ProductBrands component
-import ProductDetails from './components/ProductDetails'; // Import the ProductDescription component
+import ProductBrands from './components/ProductBrands';
+import ProductDetails from './components/ProductDetails';
 import OrderSummary from './components/OrderSummary';
 import ScheduleDelivery from './components/ScheduleDelivery';
 import ScheduleDeliverySummary from './components/ScheduleDeliverySummary';
-import PrivacyPolicy from './components/PrivacyPolicy'; // Import the PrivacyPolicy component
-
-const user = {
-  name: 'John Doe',
-  photo: 'path/to/profile/photo.jpg'
-};
+import PrivacyPolicy from './components/PrivacyPolicy';
+import Profile from './components/Profile'; // Import the Profile component
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState({
+    name: 'John Doe',
+    photo: 'path/to/profile/photo.jpg'
+  });
 
   useEffect(() => {
     // Check if user is authenticated
     const token = localStorage.getItem('token');
     if (token) {
       setIsAuthenticated(true);
+      // Fetch user details from the backend if needed
     }
   }, []);
+
+  const updateUserProfile = (newDetails) => {
+    setUser({
+      ...user,
+      ...newDetails
+    });
+  };
 
   return (
     <Router>
@@ -60,10 +67,11 @@ const App = () => {
             <Route path="/logout" element={<Logout />} />
             <Route path="/delivery-details" element={<DeliveryDetails />} />
             <Route path="/product-brands" element={<ProductBrands />} />
-            <Route path="/product-details" element={<ProductDetails />} /> 
+            <Route path="/product-details" element={<ProductDetails />} />
             <Route path="/order-summary" element={<OrderSummary />} />
             <Route path="/schedule-delivery" element={<ScheduleDelivery />} />
             <Route path="/schedule-delivery-summary" element={<ScheduleDeliverySummary />} />
+            <Route path="/profile" element={<Profile updateUserProfile={updateUserProfile} />} /> {/* Add Profile Route */}
             <Route path="*" element={isAuthenticated ? <Navigate to="/" /> : <Navigate to="/login" />} />
           </Routes>
         </div>

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
-const config = require('./default');
+const config = require('config');
 
 const dbHost = process.env.DB_HOST || 'localhost';
 const dbPort = process.env.DB_PORT || 27017;

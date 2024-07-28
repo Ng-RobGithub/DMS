@@ -8,21 +8,36 @@ const Login = () => {
         email: '',
         password: ''
     });
+    const [otp, setOtp] = useState('');
+    const [isOtpSent, setIsOtpSent] = useState(false);
+    const [error, setError] = useState('');
 
     const { email, password } = formData;
     const navigate = useNavigate();
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+    const onOtpChange = e => setOtp(e.target.value);
 
     const onSubmit = async e => {
         e.preventDefault();
         try {
             const response = await axios.post('/api/auth/login', formData);
-            console.log(response.data);
             localStorage.setItem('token', response.data.token);
-            navigate('/home'); // Update this line to redirect to Home.js
+            // Send OTP
+            await axios.post('/api/otp/generate', { email });
+            setIsOtpSent(true);
         } catch (error) {
-            console.error(error.response?.data || error.message);
+            setError(error.response?.data.message || error.message);
+        }
+    };
+
+    const onOtpSubmit = async e => {
+        e.preventDefault();
+        try {
+            await axios.post('/api/otp/verify', { email, otp });
+            navigate('/home');
+        } catch (error) {
+            setError(error.response?.data.message || error.message);
         }
     };
 
@@ -30,29 +45,46 @@ const Login = () => {
         <div className="login-page">
             <div className="login-container">
                 <h1>Login</h1>
-                <form onSubmit={onSubmit}>
-                    <div>
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            name="email"
-                            value={email}
-                            onChange={onChange}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            name="password"
-                            value={password}
-                            onChange={onChange}
-                            required
-                        />
-                    </div>
-                    <button type="submit">Login</button>
-                </form>
+                {!isOtpSent ? (
+                    <form onSubmit={onSubmit}>
+                        <div>
+                            <input
+                                type="email"
+                                placeholder="Email"
+                                name="email"
+                                value={email}
+                                onChange={onChange}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                name="password"
+                                value={password}
+                                onChange={onChange}
+                                required
+                            />
+                        </div>
+                        <button type="submit">Login</button>
+                    </form>
+                ) : (
+                    <form onSubmit={onOtpSubmit}>
+                        <div>
+                            <input
+                                type="text"
+                                placeholder="Enter OTP"
+                                name="otp"
+                                value={otp}
+                                onChange={onOtpChange}
+                                required
+                            />
+                        </div>
+                        <button type="submit">Verify OTP</button>
+                    </form>
+                )}
+                {error && <p className="error-message">{error}</p>}
                 <p className="privacy-policy">
                     By logging in, you agree to our <Link to="/privacy-policy">Privacy Policy</Link>.
                 </p>

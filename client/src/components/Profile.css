@@ -1,0 +1,30 @@
+/* Profile.css */
+.profile-page {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.profile-page h1 {
+    margin-bottom: 20px;
+}
+
+.profile-page input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+}
+
+.profile-page button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.profile-page button:hover {
+    background-color: #0056b3;
+}

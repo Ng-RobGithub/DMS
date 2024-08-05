@@ -4,6 +4,8 @@ import UserManagement from './UserManagement';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -11,7 +13,10 @@ const Users = () => {
         const res = await axios.get('/api/users');
         setUsers(res.data);
       } catch (err) {
-        console.error(err);
+        console.error('Error fetching users:', err);
+        setError('Failed to fetch users. Please try again later.');
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -21,14 +26,19 @@ const Users = () => {
   return (
     <div>
       <h1>Users</h1>
-      <ul>
-        {users.map(user => (
-          <UserManagement key={user.email} user={user} setUsers={setUsers} />
-        ))}
-      </ul>
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p className="error-message">{error}</p>
+      ) : (
+        <ul>
+          {users.map(user => (
+            <UserManagement key={user.email} user={user} setUsers={setUsers} />
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
 
 export default Users;
-

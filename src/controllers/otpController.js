@@ -1,25 +1,24 @@
-// src/controllers/otpController.js
 const Otp = require('../models/OTP'); // Adjust the path as per your directory structure
-const { generateOTP, sendOtpEmail, verifyOTP } = require('../utils/otpUtils');
+const { generateOTP, sendOtpSms, verifyOTP } = require('../utils/otpUtils');
 
 // Generate and send OTP
 const generateOtp = async (req, res) => {
-    const { email } = req.body;
+    const { phoneNumber } = req.body; // Use phoneNumber instead of email
 
     try {
         const otp = generateOTP();
 
         // Save OTP to database
         const otpEntry = new Otp({
-            email,
+            phoneNumber,
             otp,
             expiry: new Date(Date.now() + 4 * 60000) // 4 minutes from now
         });
 
         await otpEntry.save();
 
-        // Send OTP via email
-        await sendOtpEmail(email, otp);
+        // Send OTP via SMS
+        await sendOtpSms(phoneNumber, otp);
 
         res.status(200).json({ message: 'OTP sent successfully' });
     } catch (error) {
@@ -30,10 +29,10 @@ const generateOtp = async (req, res) => {
 
 // Verify OTP
 const verifyOtp = async (req, res) => {
-    const { email, otp } = req.body;
+    const { phoneNumber, otp } = req.body; // Use phoneNumber instead of email
 
     try {
-        const otpEntry = await Otp.findOne({ email, otp });
+        const otpEntry = await Otp.findOne({ phoneNumber, otp });
 
         if (!otpEntry) {
             return res.status(400).json({ message: 'Invalid OTP' });

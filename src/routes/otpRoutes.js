@@ -1,42 +1,35 @@
 const express = require('express');
-const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const Otp = require('../models/OTP'); // Adjust the path as per your directory structure
+// const Twilio = require('twilio');
+// const Otp = require('../models/OTP'); // Adjust the path as per your directory structure
 
 const router = express.Router();
 
-// Configure Nodemailer
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
-});
+// Initialize Twilio client
+// const client = Twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 // Route to generate and send OTP
 router.post('/generate', async (req, res) => {
-    const { email } = req.body;
+    const { phoneNumber } = req.body; // Assuming phone number is sent instead of email
 
     try {
         const otp = crypto.randomInt(100000, 999999).toString();
 
         // Save OTP to database
         const otpEntry = new Otp({
-            email,
+            phoneNumber,
             otp,
             expiry: new Date(Date.now() + 4 * 60000) // 4 minutes from now
         });
 
         await otpEntry.save();
 
-        // Send OTP via email
-        await transporter.sendMail({
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: 'Your OTP Code',
-            text: `Your OTP code is: ${otp}`
-        });
+        // Send OTP via SMS using Twilio
+        // await client.messages.create({
+        //     body: `Your OTP code is: ${otp}`,
+        //     from: process.env.TWILIO_PHONE_NUMBER, // Your Twilio phone number
+        //     to: phoneNumber
+        // });
 
         res.status(200).json({ message: 'OTP sent successfully' });
     } catch (error) {
@@ -47,10 +40,10 @@ router.post('/generate', async (req, res) => {
 
 // Route to verify OTP
 router.post('/verify', async (req, res) => {
-    const { email, otp } = req.body;
+    const { phoneNumber, otp } = req.body; // Assuming phone number is sent instead of email
 
     try {
-        const otpEntry = await Otp.findOne({ email, otp });
+        const otpEntry = await Otp.findOne({ phoneNumber, otp });
 
         if (!otpEntry) {
             return res.status(400).json({ message: 'Invalid OTP' });

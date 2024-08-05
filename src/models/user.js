@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
+// Define the User schema
 const UserSchema = new mongoose.Schema({
     fullName: {
         type: String,
@@ -11,37 +12,45 @@ const UserSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    password: {
+    phoneNumber: {
         type: String,
         required: true
     },
-    photo: {
-        type: String, // URL to the profile photo
-        default: ''
-    },
-    role: {
+    country: {
         type: String,
-        enum: ['user', 'admin'],
-        default: 'user'
+        required: true
     },
-    status: {
+    company: {
         type: String,
-        enum: ['active', 'inactive'],
-        default: 'active'
+        required: true
+    },
+    customerId: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
     }
-}, { timestamps: true });
-
-// Encrypt password before saving
-UserSchema.pre('save', async function(next) {
-    if (!this.isModified('password')) {
-        next();
-    }
-
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
 });
 
-// Check if the model already exists before defining it
-const User = mongoose.models.User || mongoose.model('User', UserSchema);
+// Hash password before saving
+UserSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) return next();
 
-module.exports = User;
+    try {
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+        next();
+    } catch (err) {
+        next(err);
+    }
+});
+
+// Method to verify password
+UserSchema.methods.matchPassword = async function (enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password);
+};
+
+// Create and export the User model
+module.exports = mongoose.model('User', UserSchema);

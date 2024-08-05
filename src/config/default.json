@@ -1,9 +1,0 @@
-{
-  "mongoURI": "mongodb://localhost:27017/yourdbname",
-  "jwtSecret": "your_jwt_secret",
-  "redisURL": "your_redis_url",
-  "emailUser": "robertblair4real@yahoo.com",
-  "emailPass": "iyenocbkulmuhsfc",
-  "smtpHost": "smtp.example.com",
-  "smtpPort": 587
-}

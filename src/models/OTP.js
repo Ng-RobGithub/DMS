@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 const otpSchema = new mongoose.Schema({
-    email: {
+    phoneNumber: {
         type: String,
         required: true
     },
@@ -17,4 +17,3 @@ const otpSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Otp', otpSchema);
-

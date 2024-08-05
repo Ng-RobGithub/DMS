@@ -1,50 +1,72 @@
-// src/utils/otpUtils.js
-const crypto = require('crypto');
-const nodemailer = require('nodemailer');
+/* const crypto = require('crypto');
+const twilio = require('twilio');
+require('dotenv').config();
 
-// Generate a new OTP
+// Initialize Twilio client
+const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+const verifyServiceSid = process.env.TWILIO_VERIFY_SERVICE_SID;
+
+// Generate OTP (for internal use, if needed)
 const generateOTP = () => {
-    // Generate a random OTP
-    const otp = crypto.randomInt(100000, 999999).toString(); // Generate a 6-digit OTP
-    return otp;
+    return crypto.randomInt(100000, 999999).toString();
 };
 
-// Send OTP via email
-const sendOtpEmail = async (email, otp) => {
-    const transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: parseInt(process.env.EMAIL_PORT, 10),
-        secure: process.env.EMAIL_PORT === '465', // true for 465, false for other ports
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS
-        }
-    });
-
-    const mailOptions = {
-        from: process.env.EMAIL_FROM,
-        to: email,
-        subject: 'Your OTP Code',
-        text: `Your OTP code is ${otp}.`
-    };
-
+// Send OTP via SMS using Twilio Verify API
+const sendVerification = async (phoneNumber) => {
     try {
-        await transporter.sendMail(mailOptions);
-        console.log('OTP sent successfully');
+        const verification = await client.verify.services(verifyServiceSid)
+            .verifications
+            .create({ to: phoneNumber, channel: 'sms' });
+        console.log('Verification SID:', verification.sid);
+        return verification;
     } catch (error) {
-        console.error('Error sending OTP:', error);
-        throw new Error('Failed to send OTP');
+        console.error('Error sending verification code:', error.message);
+        throw new Error('Failed to send OTP. Please try again later.');
     }
 };
 
-// Verify the OTP
-const verifyOTP = (providedOtp, actualOtp) => {
-    // Compare the provided OTP with the actual OTP
-    return providedOtp === actualOtp;
+// Check OTP via Twilio Verify API
+const checkVerification = async (phoneNumber, code) => {
+    try {
+        const verificationCheck = await client.verify.services(verifyServiceSid)
+            .verificationChecks
+            .create({ to: phoneNumber, code });
+        console.log('Verification Status:', verificationCheck.status);
+        return verificationCheck.status;
+    } catch (error) {
+        console.error('Error checking verification code:', error.message);
+        throw new Error('Failed to verify OTP. Please check the code and try again.');
+    }
 };
+
+// Send a test SMS directly (for debugging purposes)
+const sendTestSms = async (fromNumber, toNumber, message) => {
+    try {
+        const messageResponse = await client.messages.create({
+            body: message,
+            from: fromNumber,
+            to: toNumber
+        });
+        console.log('Message SID:', messageResponse.sid);
+        return messageResponse;
+    } catch (error) {
+        console.error('Error sending SMS:', error.message);
+        throw new Error('Failed to send SMS. Please try again later.');
+    }
+};
+
+// Example usage of sendTestSms function
+const fromNumber = '+2349050115674'; // Your Twilio number or verified number
+const toNumber = '+2348032775584';   // Recipient's phone number
+const testMessage = 'Hello, this is a test message from Twilio!';
+
+// Uncomment to test sending a direct SMS
+// sendTestSms(fromNumber, toNumber, testMessage);
 
 module.exports = {
     generateOTP,
-    sendOtpEmail,
-    verifyOTP
+    sendVerification,
+    checkVerification,
+    sendTestSms // Export the test SMS function
 };
+*/

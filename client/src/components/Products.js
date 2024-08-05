@@ -50,7 +50,7 @@ const Products = () => {
         const method = event.target.value;
         setDeliveryMethod(method);
         if (method) {
-            navigate('/delivery-details', { state: { deliveryMethod: method } });
+            navigate('/delivery-method', { state: { deliveryMethod: method } });
         }
     };
 

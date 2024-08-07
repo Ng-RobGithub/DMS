@@ -1,83 +1,97 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
-import Register from './components/Register';
-import Home from './components/Home';
-import Cart from './components/Cart';
-import Dashboard from './components/Dashboard';
-import Orders from './components/Orders';
-import WalletStatement from './components/WalletStatement';
-import Products from './components/Products';
-import Reports from './components/Reports';
-import Support from './components/Support';
-import FAQ from './components/FAQ';
-import Logout from './components/Logout';
 import Menus from './components/Menus';
-import DeliveryDetails from './components/DeliveryDetails';
-import DeliveryMethod from './components/DeliveryMethod';
-import ProductBrands from './components/ProductBrands';
-import ProductDetails from './components/ProductDetails';
-import OrderSummary from './components/OrderSummary';
-import ScheduleDelivery from './components/ScheduleDelivery';
-import ScheduleDeliverySummary from './components/ScheduleDeliverySummary';
-import PrivacyPolicy from './components/PrivacyPolicy';
-import Profile from './components/Profile';
-import Users from './components/Users';
-import RequestPasswordReset from './components/RequestPasswordReset';
+import PrivateRoute from './components/PrivateRoute';
+
+// Lazy load components to improve performance
+const Register = lazy(() => import('./components/Register'));
+const Home = lazy(() => import('./components/Home'));
+const Cart = lazy(() => import('./components/Cart'));
+const Dashboard = lazy(() => import('./components/Dashboard'));
+const Orders = lazy(() => import('./components/Orders'));
+const WalletStatement = lazy(() => import('./components/WalletStatement'));
+const Products = lazy(() => import('./components/Products'));
+const Reports = lazy(() => import('./components/Reports'));
+const Support = lazy(() => import('./components/Support'));
+const FAQ = lazy(() => import('./components/FAQ'));
+const Logout = lazy(() => import('./components/Logout'));
+const DeliveryDetails = lazy(() => import('./components/DeliveryDetails'));
+const DeliveryMethod = lazy(() => import('./components/DeliveryMethod'));
+const ProductBrands = lazy(() => import('./components/ProductBrands'));
+const ProductDetails = lazy(() => import('./components/ProductDetails'));
+const OrderSummary = lazy(() => import('./components/OrderSummary'));
+const ScheduleDelivery = lazy(() => import('./components/ScheduleDelivery'));
+const ScheduleDeliverySummary = lazy(() => import('./components/ScheduleDeliverySummary'));
+const PrivacyPolicy = lazy(() => import('./components/PrivacyPolicy'));
+const Profile = lazy(() => import('./components/Profile'));
+const Users = lazy(() => import('./components/Users'));
+const RequestPasswordReset = lazy(() => import('./components/RequestPasswordReset'));
+const Login = lazy(() => import('./components/Login'));
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState({
-    name: 'John Doe',
-    photo: 'path/to/profile/photo.jpg'
+    name: '',
+    photo: ''
   });
 
   useEffect(() => {
-    // Check if user is authenticated
     const token = localStorage.getItem('token');
     if (token) {
+      // Optionally verify token validity
       setIsAuthenticated(true);
-      // Optionally fetch user details from the backend if needed
+      // Fetch user details from the backend if needed
+      // Example:
+      // fetchUserDetails(token);
+    } else {
+      setIsAuthenticated(false);
     }
   }, []);
 
   const updateUserProfile = (newDetails) => {
-    setUser({
-      ...user,
+    setUser(prevUser => ({
+      ...prevUser,
       ...newDetails
-    });
+    }));
   };
 
   return (
     <Router>
       <div className="app">
-        <Menus user={user} />
+        {isAuthenticated && <Menus user={user} />}
         <div className="main-content">
-          <Routes>
-            <Route path="/" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/request-password-reset" element={<RequestPasswordReset />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} />
-            <Route path="/orders" element={isAuthenticated ? <Orders /> : <Navigate to="/login" />} />
-            <Route path="/wallet-statement" element={isAuthenticated ? <WalletStatement /> : <Navigate to="/login" />} />
-            <Route path="/products" element={isAuthenticated ? <Products /> : <Navigate to="/login" />} />
-            <Route path="/cart" element={isAuthenticated ? <Cart /> : <Navigate to="/login" />} />
-            <Route path="/reports" element={isAuthenticated ? <Reports /> : <Navigate to="/login" />} />
-            <Route path="/support" element={isAuthenticated ? <Support /> : <Navigate to="/login" />} />
-            <Route path="/faq" element={isAuthenticated ? <FAQ /> : <Navigate to="/login" />} />
-            <Route path="/logout" element={isAuthenticated ? <Logout /> : <Navigate to="/login" />} />
-            <Route path="/delivery-method" element={isAuthenticated ? <DeliveryMethod /> : <Navigate to="/login" />} />
-            <Route path="/delivery-details" element={isAuthenticated ? <DeliveryDetails /> : <Navigate to="/login" />} />
-            <Route path="/product-brands" element={isAuthenticated ? <ProductBrands /> : <Navigate to="/login" />} />
-            <Route path="/product-details" element={isAuthenticated ? <ProductDetails /> : <Navigate to="/login" />} />
-            <Route path="/order-summary" element={isAuthenticated ? <OrderSummary /> : <Navigate to="/login" />} />
-            <Route path="/schedule-delivery" element={isAuthenticated ? <ScheduleDelivery /> : <Navigate to="/login" />} />
-            <Route path="/schedule-delivery-summary" element={isAuthenticated ? <ScheduleDeliverySummary /> : <Navigate to="/login" />} />
-            <Route path="/profile" element={isAuthenticated ? <Profile updateUserProfile={updateUserProfile} /> : <Navigate to="/login" />} />
-            <Route path="/users" element={isAuthenticated ? <Users /> : <Navigate to="/login" />} />
-            <Route path="*" element={isAuthenticated ? <Navigate to="/" /> : <Navigate to="/login" />} />
-          </Routes>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Routes>
+              <Route path="/" element={<Navigate to={isAuthenticated ? "/home" : "/login"} />} />
+              <Route path="/home" element={<PrivateRoute isAuthenticated={isAuthenticated}><Home /></PrivateRoute>} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/request-password-reset" element={<RequestPasswordReset />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              
+              <Route path="/dashboard" element={<PrivateRoute isAuthenticated={isAuthenticated}><Dashboard /></PrivateRoute>} />
+              <Route path="/orders" element={<PrivateRoute isAuthenticated={isAuthenticated}><Orders /></PrivateRoute>} />
+              <Route path="/wallet-statement" element={<PrivateRoute isAuthenticated={isAuthenticated}><WalletStatement /></PrivateRoute>} />
+              <Route path="/products" element={<PrivateRoute isAuthenticated={isAuthenticated}><Products /></PrivateRoute>} />
+              <Route path="/cart" element={<PrivateRoute isAuthenticated={isAuthenticated}><Cart /></PrivateRoute>} />
+              <Route path="/reports" element={<PrivateRoute isAuthenticated={isAuthenticated}><Reports /></PrivateRoute>} />
+              <Route path="/support" element={<PrivateRoute isAuthenticated={isAuthenticated}><Support /></PrivateRoute>} />
+              <Route path="/faq" element={<PrivateRoute isAuthenticated={isAuthenticated}><FAQ /></PrivateRoute>} />
+              <Route path="/logout" element={<PrivateRoute isAuthenticated={isAuthenticated}><Logout /></PrivateRoute>} />
+              <Route path="/delivery-method" element={<PrivateRoute isAuthenticated={isAuthenticated}><DeliveryMethod /></PrivateRoute>} />
+              <Route path="/delivery-details" element={<PrivateRoute isAuthenticated={isAuthenticated}><DeliveryDetails /></PrivateRoute>} />
+              <Route path="/product-brands" element={<PrivateRoute isAuthenticated={isAuthenticated}><ProductBrands /></PrivateRoute>} />
+              <Route path="/product-details" element={<PrivateRoute isAuthenticated={isAuthenticated}><ProductDetails /></PrivateRoute>} />
+              <Route path="/order-summary" element={<PrivateRoute isAuthenticated={isAuthenticated}><OrderSummary /></PrivateRoute>} />
+              <Route path="/schedule-delivery" element={<PrivateRoute isAuthenticated={isAuthenticated}><ScheduleDelivery /></PrivateRoute>} />
+              <Route path="/schedule-delivery-summary" element={<PrivateRoute isAuthenticated={isAuthenticated}><ScheduleDeliverySummary /></PrivateRoute>} />
+              <Route path="/profile" element={<PrivateRoute isAuthenticated={isAuthenticated}><Profile updateUserProfile={updateUserProfile} /></PrivateRoute>} />
+              <Route path="/users" element={<PrivateRoute isAuthenticated={isAuthenticated}><Users /></PrivateRoute>} />
+              
+              <Route path="*" element={<Navigate to={isAuthenticated ? "/home" : "/login"} />} />
+            </Routes>
+          </Suspense>
         </div>
       </div>
     </Router>

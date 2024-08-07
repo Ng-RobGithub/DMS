@@ -1,11 +1,7 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const dbHost = process.env.DB_HOST || 'localhost';
-const dbPort = process.env.DB_PORT || 27017;
-const dbName = process.env.DB_DATABASE || 'files_manager';
-
-const dbURL = `mongodb://${dbHost}:${dbPort}/${dbName}`;
+const dbURL = process.env.MONGO_URI || `mongodb://${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || 27017}/${process.env.DB_DATABASE || 'files_manager'}`;
 
 const connectDB = async () => {
   try {

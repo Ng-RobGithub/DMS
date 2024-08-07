@@ -8,7 +8,7 @@ const Home = () => {
       <h1>Home</h1>
       <p>Welcome to the Distributor Management System</p>
 
-      <div className="home-links">
+      <nav className="home-links">
         <Link to="/profile" className="home-link">View Profile</Link>
         <Link to="/orders" className="home-link">View Orders</Link>
         <Link to="/products" className="home-link">Browse Products</Link>
@@ -19,7 +19,7 @@ const Home = () => {
         <Link to="/cart" className="home-link">Cart</Link>
         <Link to="/payment" className="home-link">Payment</Link>
         <Link to="/logout" className="home-link">Logout</Link>
-      </div>
+      </nav>
     </div>
   );
 };

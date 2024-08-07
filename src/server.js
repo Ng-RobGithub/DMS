@@ -1,13 +1,22 @@
-const dotenv = require('dotenv');
-dotenv.config(); // Load environment variables from .env file
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const winston = require('winston');
 const passport = require('passport');
-const connectDB = require('../config/db');
+const connectDB = require('./config/db'); // Ensure this path is correct
 const errorHandler = require('./middleware/errorHandler');
 const { sessionMiddleware, protect } = require('./middleware/authMiddleware');
+require('./config/passportConfig'); // Import passport configuration
+const authRoutes = require('./routes/authRoutes'); // Adjust the path as needed
+
+
+// Debugging environment variables
+console.log('MONGO_URI:', process.env.MONGO_URI); // Should print MongoDB URI
+console.log('JWT_SECRET:', process.env.JWT_SECRET); // Should print JWT secret
+console.log('PORT:', process.env.PORT); // Should print server port
+console.log('FRONTEND_URL:', process.env.FRONTEND_URL); // Should print frontend URL
+console.log('SESSION_SECRET:', process.env.SESSION_SECRET); // Should print session secret
 
 // Logger setup
 const logger = winston.createLogger({

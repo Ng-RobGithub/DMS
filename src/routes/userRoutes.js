@@ -15,11 +15,11 @@ const registerValidation = [
 // Validation middleware for updating user profile
 const updateProfileValidation = [
   check('fullName', 'Name is required').not().isEmpty(),
-  check('photo', 'Photo URL is required').optional().isURL()
+  check('photo', 'Photo URL should be a valid URL').optional().isURL()
 ];
 
 // Route to register a new user
-router.post('/', registerValidation, (req, res) => {
+router.post('/register', registerValidation, (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });

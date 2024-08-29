@@ -1,0 +1,23 @@
+/* client/src/components/ProductDetails.css */
+.cart-icon-container {
+    position: relative;
+    display: inline-block;
+    margin: 10px; /* Adjust margin as needed */
+}
+
+.cart-icon {
+    font-size: 2rem;
+    color: #000; /* Adjust color as needed */
+    cursor: pointer;
+}
+
+.notification-dot {
+    position: absolute;
+    top: -5px; /* Adjust position to better align with the cart icon */
+    right: -5px; /* Adjust position to better align with the cart icon */
+    width: 12px;
+    height: 12px;
+    background-color: red;
+    border-radius: 50%;
+    border: 2px solid #fff; /* Optional: Add border for better visibility */
+}

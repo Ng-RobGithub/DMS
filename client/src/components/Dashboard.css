@@ -1,0 +1,180 @@
+/* Dashboard.css */
+
+/* General Styles */
+.dashboard-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  position: relative; /* Ensure the logo container can be positioned absolutely */
+}
+
+/* Logo Container */
+.logo-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.logo {
+  width: 100px; /* Adjust size as needed */
+  height: auto;
+}
+
+/* Welcome Section */
+.welcome-section h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.welcome-section p {
+  font-size: 18px;
+}
+
+/* Wallet Balance Banner */
+.wallet-banner {
+  display: flex;
+  justify-content: space-between;
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.banner-item {
+  text-align: center;
+  flex: 1;
+}
+
+.banner-item h2 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.banner-item p {
+  font-size: 24px;
+  font-weight: bold;
+  color: #4caf50;
+}
+
+/* Order Status Buttons */
+.order-status-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.order-btn {
+  flex: 1;
+  text-align: center;
+  padding: 15px;
+  background-color: #2196f3;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 16px;
+  margin: 0 10px;
+  position: relative;
+}
+
+.order-btn .badge {
+  background-color: #ff5722;
+  border-radius: 12px;
+  padding: 5px 10px;
+  color: white;
+  font-size: 14px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.order-btn:hover {
+  background-color: #1976d2;
+}
+
+/* Distributor Performance Chart */
+.performance-chart {
+  margin-bottom: 20px;
+}
+
+.performance-chart h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+/* Order Summary */
+.order-summary {
+  margin-bottom: 20px;
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.order-table th, .order-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.order-table th {
+  background-color: #f2f2f2;
+}
+
+.order-table td {
+  background-color: #fafafa;
+}
+
+/* Notifications */
+.notifications-section {
+  margin-bottom: 20px;
+}
+
+.notifications-list {
+  list-style: none;
+  padding: 0;
+}
+
+.notifications-list li {
+  background-color: #e3f2fd;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 4px;
+}
+
+/* Activity Feed */
+.activity-feed {
+  margin-bottom: 20px;
+}
+
+.activity-list {
+  list-style: none;
+  padding: 0;
+}
+
+.activity-list li {
+  background-color: #e8f5e9;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 4px;
+}
+
+/* Support Section */
+.support-section {
+  margin-bottom: 20px;
+}
+
+.support-links a {
+  display: block;
+  background-color: #2196f3;
+  color: white;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 4px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.support-links a:hover {
+  background-color: #1976d2;
+}

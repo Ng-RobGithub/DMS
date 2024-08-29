@@ -1,0 +1,63 @@
+.landing-page {
+  font-family: Arial, sans-serif;
+}
+
+.landing-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Ensure vertical alignment */
+  padding: 1rem;
+  background: #f8f8f8;
+}
+
+.landing-header .logo {
+  display: flex;
+  align-items: center;
+}
+
+.landing-header .logo img {
+  height: 40px; /* Adjust size as needed */
+  width: auto;
+}
+
+.landing-header nav a {
+  margin: 0 1rem;
+}
+
+.hero {
+  text-align: center;
+  padding: 2rem;
+  background: #4caf50;
+  color: white;
+}
+
+.hero .cta-buttons {
+  margin-top: 1rem;
+}
+
+.cta-button {
+  margin: 0 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #ffffff;
+  color: #4caf50;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.features, .benefits, .how-it-works {
+  padding: 2rem;
+}
+
+.feature-item, .testimonial {
+  margin-bottom: 1rem;
+}
+
+.landing-footer {
+  background: #f8f8f8;
+  padding: 1rem;
+  text-align: center;
+}
+
+.landing-footer .social-media a {
+  margin: 0 0.5rem;
+}

@@ -1,0 +1,33 @@
+/* client/src/components/Profile.css */
+
+.profile-page {
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+  }
+  
+  .profile-page form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .profile-page label {
+    margin-bottom: 5px;
+  }
+  
+  .profile-page input[type="text"] {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .profile-page input[type="file"] {
+    margin-bottom: 20px;
+  }
+  
+  .profile-page .profile-preview {
+    max-width: 200px;
+    margin-top: 10px;
+  }
+  

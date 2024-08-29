@@ -1,0 +1,90 @@
+/* client/src/components/ScheduleDelivery.css */
+.schedule-delivery-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-delivery-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.form-group .error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.schedule-delivery-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.schedule-delivery-buttons button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.schedule-delivery-buttons button:hover {
+    background-color: #0056b3;
+}
+
+.schedule-delivery-buttons button:focus,
+.schedule-delivery-buttons button:active {
+    background-color: #004085;
+    outline: none;
+}
+
+@media (max-width: 600px) {
+    .schedule-delivery-container {
+        padding: 15px;
+    }
+
+    .schedule-delivery-buttons {
+        flex-direction: column;
+    }
+
+    .schedule-delivery-buttons button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .schedule-delivery-buttons button:last-child {
+        margin-bottom: 0;
+    }
+}

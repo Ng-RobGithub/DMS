@@ -37,7 +37,7 @@ const ScheduleDeliverySummary = () => {
             };
 
             // Replace this with your actual API for order creation
-            const response = await axios.post('/api/delivery/checkout', {
+            const response = await axios.post('http://localhost:5000/api/delivery/checkout', {
                 paymentReference,
                 paymentDate,
                 deliveryDate,

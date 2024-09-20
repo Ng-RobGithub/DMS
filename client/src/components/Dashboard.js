@@ -36,19 +36,23 @@ const Dashboard = () => {
       try {
         // Fetch user info
         const userResponse = await api.get('/user'); // Use the api utility for authenticated request
+        console.log("User Response:", userResponse); // Add this log
         setFullName(userResponse.data.fullName); // Set the user's name from the response
 
         // Fetch wallet balance
         const walletResponse = await api.get('/dashboard'); // Adjust endpoint as needed
+        console.log("Wallet Response:", walletResponse); // Add this log
         setTotalWalletBalance(walletResponse.data.totalWalletBalance);
         setAvailableBalance(walletResponse.data.availableBalance);
 
         // Fetch order counts
         const ordersResponse = await api.get('/orders/counts');
+        console.log("Order Counts Response:", ordersResponse); // Add this log
         setOrderCounts(ordersResponse.data);
 
         // Fetch order data
         const ordersDataResponse = await api.get('/orders');
+        console.log("Orders Data Response:", ordersDataResponse); // Add this log
         const ordersDataJson = ordersDataResponse.data;
         const ordersByQuarter = [0, 0, 0, 0]; // Initialize array for four quarters
 
@@ -80,6 +84,7 @@ const Dashboard = () => {
 
         // Fetch recent orders
         const recentOrdersResponse = await api.get('/orders/recent');
+        console.log("Recent Orders Response:", recentOrdersResponse); // Add this log
         setRecentOrders(recentOrdersResponse.data);
 
       } catch (error) {

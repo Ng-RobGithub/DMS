@@ -9,6 +9,9 @@ const path = require('path'); // Path for serving React build
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const authRoutes = require('./routes/authRoutes');
 
+// Import delivery routes
+const deliveryRoutes = require('./routes/deliveryRoutes');
+
 // Payment Route Imports
 const stripePaymentRoute = require('./routes/stripePaymentRoute');
 const paypalPaymentRoute = require('./routes/paypalPaymentRoute');
@@ -83,7 +86,7 @@ app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/cart', require('./routes/cart'));
 app.use('/api/reports', require('./routes/reportRoutes'));
-app.use('/api/delivery', require('./routes/deliveryRoutes'));
+app.use('/api/delivery', deliveryRoutes); // Use imported deliveryRoutes
 
 // Payment Routes
 app.use('/api/payments/stripe', stripePaymentRoute);

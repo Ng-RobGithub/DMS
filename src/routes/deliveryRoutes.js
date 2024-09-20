@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { protect } = require('../middleware/authMiddleware'); // Include your auth middleware
+const { protect } = require('../middleware/authMiddleware'); // Ensure this is correctly implemented
 const Order = require('../models/Order'); // Import your Order model
 
 // Example data for countries and states
@@ -14,13 +14,21 @@ router.get('/countries', (req, res) => {
   res.json(countries);
 });
 
-// Route to get states based on country
+// Route to get states based on the country
 router.get('/states/:country', (req, res) => {
   const country = req.params.country;
-  res.json(states[country] || []);
+  if (states[country]) {
+    res.json(states[country]);
+  } else {
+    res.status(400).json({ message: 'Country not found' });
+  }
 });
 
-// Route to create a new delivery order
+/**
+ * @route   POST /api/delivery/checkout
+ * @desc    Create a new delivery order
+ * @access  Private (Protected route using token-based auth)
+ */
 router.post('/checkout', protect, async (req, res) => {
   const {
     paymentReference,
@@ -34,12 +42,11 @@ router.post('/checkout', protect, async (req, res) => {
 
   // Validate the required fields
   if (!paymentReference || !paymentDate || !deliveryDate || !truckSize || !deliveryAddress || !deliveryState || !deliveryCountry) {
-    return res.status(400).json({ message: 'Please fill in all required fields' });
+    return res.status(400).json({ message: 'Please fill in all the required fields' });
   }
 
   try {
-    // Assuming req.user contains the authenticated user's info from the protect middleware
-    const userId = req.user.id;
+    const userId = req.user.id; // Get user ID from token
 
     // Create a new order
     const newOrder = new Order({

@@ -1,5 +1,4 @@
 require('dotenv').config(); // Load environment variables
-
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
@@ -24,6 +23,12 @@ const protect = async (req, res, next) => {
 
         // Verify the JWT token
         const decoded = jwt.verify(token, JWT_SECRET);
+
+        // Ensure the decoded token contains user data (user object or id)
+        if (!decoded || !decoded.user || !decoded.user.id) {
+            return res.status(401).json({ message: 'Authorization denied: Invalid token payload' });
+        }
+
         req.user = decoded.user;
 
         // Check if the user exists in the database
@@ -40,6 +45,7 @@ const protect = async (req, res, next) => {
         } else if (err.name === 'JsonWebTokenError') {
             return res.status(401).json({ message: 'Invalid token' });
         } else {
+            console.error('Error in authentication middleware:', err);
             return res.status(500).json({ message: 'Server error' });
         }
     }

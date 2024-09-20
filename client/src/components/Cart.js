@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Cart.css'; // Import the CSS for styling
+import companyLogo from '../assets/NgRob.png'; // Import the company logo
 
 const Cart = () => {
     const navigate = useNavigate();
@@ -44,6 +45,11 @@ const Cart = () => {
 
     return (
         <div className="cart-container">
+            {/* Logo placed at the top left */}
+            <div className="logo-container">
+                <img src={companyLogo} alt="Company Logo" className="company-logo" />
+            </div>
+
             <h1>Cart</h1>
             <p>Current Wallet Balance: NGN {walletBalance.toFixed(2)}</p>
             <p>Remaining Balance: NGN {remainingBalance >= 0 ? remainingBalance.toFixed(2) : 0}</p>
@@ -53,13 +59,16 @@ const Cart = () => {
                     <ul>
                         {cart.map((item, index) => (
                             <li key={index} className="cart-item">
-                                <p>Product Brand: {item.brand}</p>
-                                <p>Quantity Ordered: {item.quantity}</p>
-                                <p>Total Price: NGN {item.price * item.quantity}</p>
+                                <p className="item-detail">Product Brand: {item.brand}</p>
+                                <p className="item-detail">Quantity Ordered: {item.quantity}</p>
+                                <p className="item-detail">Total Price: NGN {item.price * item.quantity}</p>
                                 <button onClick={() => handleDelete(index)} className="delete-button">Delete</button>
                             </li>
                         ))}
                     </ul>
+                    <div className="total-price">
+                        <p>Total Price: NGN {totalPrice.toFixed(2)}</p>
+                    </div>
                     <div className="cart-buttons">
                         <button onClick={handleSave}>Save</button>
                     </div>

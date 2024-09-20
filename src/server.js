@@ -1,14 +1,19 @@
-// src/server.js
-require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
-const path = require('path');
 const winston = require('winston');
 const passport = require('passport');
 const connectDB = require('./config/db');
-const errorHandler = require('./middleware/errorHandler');
-const { sessionMiddleware } = require('./middleware/authMiddleware');
-require('./config/passportConfig'); // Import passport configuration
+const errorHandler = require('./middleware/errorHandler.js');
+const cookieParser = require('cookie-parser');
+const cors = require('cors'); // CORS for cross-origin handling
+const path = require('path'); // Path for serving React build
+const dashboardRoutes = require('./routes/dashboardRoutes');
+const authRoutes = require('./routes/authRoutes');
+
+// Payment Route Imports
+const stripePaymentRoute = require('./routes/stripePaymentRoute');
+const paypalPaymentRoute = require('./routes/paypalPaymentRoute');
+const flutterwavePaymentRoute = require('./routes/flutterwavePaymentRoute');
+const quicktellerPaymentRoute = require('./routes/quicktellerPaymentRoute');
 
 // Logger setup
 const logger = winston.createLogger({
@@ -32,7 +37,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Verify required environment variables
-const requiredEnvVars = ['JWT_SECRET', 'PORT', 'FRONTEND_URL', 'MONGO_URI', 'SESSION_SECRET'];
+const requiredEnvVars = ['JWT_SECRET', 'PORT', 'FRONTEND_URL', 'MONGO_URI'];
 requiredEnvVars.forEach((envVar) => {
     if (!process.env[envVar]) {
         logger.error(`${envVar} is not defined in the environment variables.`);
@@ -51,45 +56,47 @@ requiredEnvVars.forEach((envVar) => {
     }
 })();
 
-const app = express();
+const app = express(); // Initialize Express app
 
 // Use CORS middleware
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000', // Ensure this matches your frontend URL
-    credentials: true,
-    optionsSuccessStatus: 200
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    optionsSuccessStatus: 200 // For legacy browser support
 }));
 
 // Init Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json()); // Parse JSON bodies
+app.use(express.urlencoded({ extended: false })); // Parse URL-encoded bodies
 
-// Use session middleware
-app.use(sessionMiddleware);
+// Use cookie-parser middleware (if needed for any cookie-based functionality)
+app.use(cookieParser());
 
-// Initialize Passport
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, '../client/build')));
+// Initialize Passport (for JWT-based authentication)
+app.use(passport.initialize()); // Initialize Passport middleware
 
 // API Routes
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/dashboard', require('./routes/dashboardRoutes'));
+app.use('/api/auth', authRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/orders', require('./routes/orders'));
+app.use('/api/wallet', require('./routes/wallet'));
 app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/cart', require('./routes/cart'));
 app.use('/api/reports', require('./routes/reportRoutes'));
 app.use('/api/delivery', require('./routes/deliveryRoutes'));
 
-// Catchall handler for React routes
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build/index.html'));
-});
+// Payment Routes
+app.use('/api/payments/stripe', stripePaymentRoute);
+app.use('/api/payments/paypal', paypalPaymentRoute);
+app.use('/api/payments/flutterwave', flutterwavePaymentRoute);
+app.use('/api/payments/quickteller', quicktellerPaymentRoute);
 
 // Centralized error handling middleware
 app.use(errorHandler);
+
+// Catchall handler for React routes (move this to the end)
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+});
 
 module.exports = app; // Export the app instance

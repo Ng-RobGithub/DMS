@@ -1,23 +1,43 @@
 /* client/src/components/ProductDetails.css */
+
+.product-details-container {
+    padding: 20px;
+    text-align: center;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.company-logo {
+    height: 50px; /* Adjust the size as necessary */
+}
+
 .cart-icon-container {
     position: relative;
     display: inline-block;
-    margin: 10px; /* Adjust margin as needed */
 }
 
 .cart-icon {
     font-size: 2rem;
-    color: #000; /* Adjust color as needed */
     cursor: pointer;
 }
 
 .notification-dot {
     position: absolute;
-    top: -5px; /* Adjust position to better align with the cart icon */
-    right: -5px; /* Adjust position to better align with the cart icon */
-    width: 12px;
-    height: 12px;
+    top: -5px;
+    right: -10px;
+    width: 15px;
+    height: 15px;
     background-color: red;
     border-radius: 50%;
-    border: 2px solid #fff; /* Optional: Add border for better visibility */
 }
+
+h1, h2 {
+    margin: 10px 0;
+}
+
+/* Add other styles for product details, quantity control, etc. */

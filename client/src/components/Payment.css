@@ -1,0 +1,45 @@
+.payment-container {
+  max-width: 600px;
+  margin: 50px auto;
+  text-align: center;
+}
+
+.payment-container h1 {
+  margin-bottom: 30px;
+}
+
+.payment-gateways {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.gateway-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  width: 150px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background-color: white;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.gateway-btn img {
+  width: 50px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.gateway-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.gateway-btn.stripe { border-color: #6772e5; }
+.gateway-btn.paypal { border-color: #003087; }
+.gateway-btn.flutterwave { border-color: #009cdf; }
+.gateway-btn.quickteller { border-color: #ff8000; }

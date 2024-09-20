@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { protect } = require('../middleware/authMiddleware'); // Importing specific middleware function
-const orderController = require('../controllers/orderController');
+const orderController = require('../controllers/orderController'); // Import the entire controller
 
 // @route    POST api/orders
 // @desc     Create a new order
@@ -32,5 +32,10 @@ router.delete('/:id', protect, orderController.deleteOrder);
 // @desc     Get distributor performance by quarters
 // @access   Private
 router.get('/performance', protect, orderController.getQuarterlyPerformance);
+
+// @route    POST api/orders/refresh-token
+// @desc     Refresh authentication token
+// @access   Private
+router.post('/refresh-token', protect, orderController.refreshToken);
 
 module.exports = router;

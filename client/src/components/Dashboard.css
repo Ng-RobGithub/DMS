@@ -178,3 +178,18 @@
 .support-links a:hover {
   background-color: #1976d2;
 }
+
+/* Loading Spinner */
+.spinner {
+  font-size: 24px;
+  text-align: center;
+  margin: 20px;
+}
+
+/* Error Message */
+.error-message {
+  color: red;
+  font-size: 18px;
+  text-align: center;
+  margin: 20px;
+}

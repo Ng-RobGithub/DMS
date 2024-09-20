@@ -1,71 +1,62 @@
+/* ScheduleDeliverySummary.css */
+
 .schedule-delivery-summary-container {
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
 }
 
-.schedule-delivery-summary-container h1 {
-    text-align: center;
-    margin-bottom: 20px;
+.logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    height: 50px; /* Adjust size as needed */
 }
 
 .summary {
-    margin-bottom: 20px;
+    margin-top: 80px; /* Adjust margin to account for the logo */
 }
 
 .summary p {
+    font-size: 1.1em;
     margin: 10px 0;
-    font-size: 16px;
-}
-
-.summary p strong {
-    font-weight: bold;
 }
 
 .summary-buttons {
     display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+    flex-direction: column;
+    align-items: center;
 }
 
-.summary-buttons button {
+button {
     padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
+    margin: 5px;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
+    color: white;
+    background-color: #007bff;
     cursor: pointer;
-    transition: background-color 0.3s;
 }
 
-.summary-buttons button:hover {
+button:hover {
     background-color: #0056b3;
 }
 
-.summary-buttons button:focus,
-.summary-buttons button:active {
-    background-color: #004085;
-    outline: none;
+input[type="text"] {
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 300px;
 }
 
-@media (max-width: 600px) {
-    .schedule-delivery-summary-container {
-        padding: 15px;
-    }
-
-    .summary-buttons {
-        flex-direction: column;
-    }
-
-    .summary-buttons button {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    .summary-buttons button:last-child {
-        margin-bottom: 0;
-    }
+.error {
+    color: red;
+    font-size: 0.875em;
 }

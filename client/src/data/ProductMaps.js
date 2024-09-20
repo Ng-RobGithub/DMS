@@ -20,7 +20,7 @@ export const productDetails = {
         description: "3X.42.5N IBESE provides optimal performance in various conditions.",
         pricePerBag: 7700,
     },
-    "NGN.Falcon Cement": {
+    "NGN.Falcon Cement 32.5R": {
         description: "NGN.Falcon Cement is a top choice for construction.",
         pricePerBag: 7650,
     },

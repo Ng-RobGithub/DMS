@@ -1,64 +1,87 @@
-/* client/src/components/Cart.css */
+/* Cart.css */
+
 .cart-container {
+    max-width: 800px;
+    margin: 0 auto;
     padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative; /* To position the logo absolutely within this container */
+}
+
+.logo-container {
+    position: absolute;
+    top: 10px; /* Adjust as needed */
+    left: 10px; /* Adjust as needed */
+}
+
+.company-logo {
+    width: 100px; /* Adjust the size as needed */
+    height: auto;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+p {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 10px; /* Add some space below paragraphs */
 }
 
 .cart-items {
-    margin: 20px 0;
+    margin-top: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
 }
 
 .cart-item {
+    padding: 10px;
     border-bottom: 1px solid #ddd;
-    padding: 10px 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
 
-.cart-item p {
-    margin: 5px 0;
+.item-detail {
+    margin: 0;
+    margin-bottom: 10px; /* Space between each detail */
 }
 
 .delete-button {
-    background-color: #dc3545;
-    color: #fff;
+    background-color: #ff4d4d;
+    color: white;
     border: none;
     padding: 8px 12px;
+    border-radius: 4px;
     cursor: pointer;
 }
 
 .delete-button:hover {
-    background-color: #c82333;
+    background-color: #ff3333;
 }
 
-.cart-buttons {
+.cart-buttons, .cart-footer-buttons {
     margin-top: 20px;
+    text-align: center;
 }
 
+.cart-footer-buttons button,
 .cart-buttons button {
-    margin-right: 10px;
-    padding: 10px;
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
     border: none;
-    background-color: #007bff;
-    color: #fff;
+    border-radius: 4px;
     cursor: pointer;
-}
-
-.cart-buttons button:hover {
-    background-color: #0056b3;
-}
-
-.cart-footer-buttons {
-    margin-top: 20px;
 }
 
 .cart-footer-buttons button {
-    margin-right: 10px;
-    padding: 10px;
-    border: none;
     background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
+    color: white;
 }
 
 .cart-footer-buttons button:hover {
@@ -66,6 +89,14 @@
 }
 
 .empty-cart {
-    font-style: italic;
+    text-align: center;
+    font-size: 20px;
+    color: #777;
 }
 
+.total-price {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px; /* Add space above the total price */
+    text-align: right; /* Align the total price to the right */
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './ScheduleDelivery.css'; // Import CSS for styling
+import companyLogo from '../assets/NgRob.png'; // Import the company logo
 
 const ScheduleDelivery = () => {
     const navigate = useNavigate();
@@ -20,7 +21,7 @@ const ScheduleDelivery = () => {
     const [paymentReference, setPaymentReference] = useState('');
     const [paymentDate, setPaymentDate] = useState('');
     const [deliveryDate, setDeliveryDate] = useState('');
-    const [truckSize, setTruckSize] = useState('300 bags/truck');
+    const [truckSize, setTruckSize] = useState('15T');
     const [deliveryAddress, setDeliveryAddress] = useState('');
     const [selectedState, setSelectedState] = useState(deliveryState || '');
     const [selectedCountry, setSelectedCountry] = useState(deliveryCountry || 'Nigeria');
@@ -86,7 +87,7 @@ const ScheduleDelivery = () => {
             setPaymentReference(orderData.paymentReference || '');
             setPaymentDate(orderData.paymentDate || '');
             setDeliveryDate(orderData.deliveryDate || '');
-            setTruckSize(orderData.truckSize || '300 bags/truck');
+            setTruckSize(orderData.truckSize || '15T');
             setDeliveryAddress(orderData.deliveryAddress || '');
             setSelectedState(orderData.deliveryState || '');
             setSelectedCountry(orderData.deliveryCountry || 'Nigeria');
@@ -95,6 +96,11 @@ const ScheduleDelivery = () => {
 
     return (
         <div className="schedule-delivery-container">
+            {/* Logo placed at the top left */}
+            <div className="logo-container">
+                <img src={companyLogo} alt="Company Logo" className="company-logo" />
+            </div>
+
             <h1>Schedule Delivery</h1>
             <form>
                 <div className="form-group">
@@ -129,9 +135,10 @@ const ScheduleDelivery = () => {
                 <div className="form-group">
                     <label>Truck Size</label>
                     <select value={truckSize} onChange={(e) => setTruckSize(e.target.value)}>
-                        <option value="300 bags/truck">300 bags/truck</option>
-                        <option value="600 bags/truck">600 bags/truck</option>
-                        <option value="900 bags/truck">900 bags/truck</option>
+                        <option value="15T">15T</option>
+                        <option value="30T">30T</option>
+                        <option value="40T">40T</option>
+                        <option value="45T">45T</option>
                     </select>
                 </div>
                 <div className="form-group">

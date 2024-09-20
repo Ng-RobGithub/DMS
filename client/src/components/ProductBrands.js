@@ -1,6 +1,8 @@
 // client/src/components/ProductBrands.js
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import './ProductBrands.css';
+import companyLogo from '../assets/NgRob.png'; // Import logo
 
 const ProductBrands = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -28,23 +30,34 @@ const ProductBrands = () => {
     };
 
     return (
-        <div>
+        <div className="product-brands-container">
+            {/* Add the company logo */}
+            <img src={companyLogo} alt="Company Logo" className="company-logo" />
+            
             <h1>Product Brands</h1>
+
             <input
                 type="text"
                 placeholder="Search for a product brand"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-bar"
             />
-            <ul>
+
+            <ul className="brand-list">
                 {filteredBrands.map((brand) => (
-                    <li key={brand} onClick={() => handleBrandClick(brand)}>
-                        {brand}
+                    <li key={brand}>
+                        <button className="brand-button" onClick={() => handleBrandClick(brand)}>
+                            {brand}
+                        </button>
                     </li>
                 ))}
             </ul>
-            <button onClick={() => navigate(-1)}>&lt;&lt; Back</button>
-            <button onClick={() => navigate('/')}>Cancel</button>
+
+            <div className="button-container">
+                <button className="back-button" onClick={() => navigate(-1)}>&lt;&lt; Back</button>
+                <button className="cancel-button" onClick={() => navigate('/')}>Cancel</button>
+            </div>
         </div>
     );
 };

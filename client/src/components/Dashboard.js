@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import './Dashboard.css';
-import logo from '../assets/NgRob1.png'; // Ensure this path is correct
+import logo from '../assets/NgRob.png'; // Ensure this path is correct
+import api from '../api'; // Import the configured api instance
 
 // Register the necessary Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -19,15 +20,39 @@ const Dashboard = () => {
       },
     ],
   });
+  const [totalWalletBalance, setTotalWalletBalance] = useState(0);
+  const [availableBalance, setAvailableBalance] = useState(0);
+  const [orderCounts, setOrderCounts] = useState({
+    newOrders: 0,
+    savedOrders: 0,
+    pendingOrders: 0,
+    submittedOrders: 0,
+  });
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [fullName, setFullName] = useState(''); // State to hold the user's name
 
   useEffect(() => {
-    // Fetch order data when the component mounts
-    fetch('/api/orders')  // Replace with your actual API endpoint
-      .then(response => response.json())
-      .then(data => {
+    const fetchDashboardData = async () => {
+      try {
+        // Fetch user info
+        const userResponse = await api.get('/user'); // Use the api utility for authenticated request
+        setFullName(userResponse.data.fullName); // Set the user's name from the response
+
+        // Fetch wallet balance
+        const walletResponse = await api.get('/dashboard'); // Adjust endpoint as needed
+        setTotalWalletBalance(walletResponse.data.totalWalletBalance);
+        setAvailableBalance(walletResponse.data.availableBalance);
+
+        // Fetch order counts
+        const ordersResponse = await api.get('/orders/counts');
+        setOrderCounts(ordersResponse.data);
+
+        // Fetch order data
+        const ordersDataResponse = await api.get('/orders');
+        const ordersDataJson = ordersDataResponse.data;
         const ordersByQuarter = [0, 0, 0, 0]; // Initialize array for four quarters
 
-        data.forEach(order => {
+        ordersDataJson.forEach(order => {
           const orderDate = new Date(order.date);
           const month = orderDate.getMonth() + 1; // getMonth() is zero-indexed
 
@@ -52,10 +77,18 @@ const Dashboard = () => {
             },
           ],
         });
-      })
-      .catch(error => {
-        console.error('Error fetching order data:', error);
-      });
+
+        // Fetch recent orders
+        const recentOrdersResponse = await api.get('/orders/recent');
+        setRecentOrders(recentOrdersResponse.data);
+
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        alert('Failed to load dashboard data.');
+      }
+    };
+
+    fetchDashboardData();
   }, []); // Empty dependency array to run once on mount
 
   return (
@@ -67,7 +100,7 @@ const Dashboard = () => {
 
       {/* Welcome Section */}
       <section className="welcome-section">
-        <h1>Welcome back, John Doe!</h1>
+        <h1>Welcome back, {fullName}!</h1>
         <p>Today is {new Date().toLocaleDateString()}</p>
       </section>
 
@@ -75,27 +108,27 @@ const Dashboard = () => {
       <section className="wallet-banner">
         <div className="banner-item">
           <h2>Total Wallet Balance</h2>
-          <p>$5,000</p>
+          <p>NGN{totalWalletBalance.toLocaleString()}</p>
         </div>
         <div className="banner-item">
           <h2>Available Balance</h2>
-          <p>$3,500</p>
+          <p>NGN{availableBalance.toLocaleString()}</p>
         </div>
       </section>
 
       {/* Order Status Buttons */}
       <section className="order-status-buttons">
         <Link to="/orders/new" className="order-btn">
-          New Orders <span className="badge">5</span>
+          New Orders <span className="badge">{orderCounts.newOrders}</span>
         </Link>
         <Link to="/orders/saved" className="order-btn">
-          Saved Orders <span className="badge">3</span>
+          Saved Orders <span className="badge">{orderCounts.savedOrders}</span>
         </Link>
         <Link to="/orders/pending" className="order-btn">
-          Pending Orders <span className="badge">2</span>
+          Pending Orders <span className="badge">{orderCounts.pendingOrders}</span>
         </Link>
         <Link to="/orders/submitted" className="order-btn">
-          Submitted Orders <span className="badge">4</span>
+          Submitted Orders <span className="badge">{orderCounts.submittedOrders}</span>
         </Link>
       </section>
 
@@ -118,55 +151,28 @@ const Dashboard = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>12345</td>
-              <td>Submitted</td>
-              <td>$2,000</td>
-              <td>08/23/2024</td>
-            </tr>
-            <tr>
-              <td>12344</td>
-              <td>Saved</td>
-              <td>$1,500</td>
-              <td>08/22/2024</td>
-            </tr>
-            <tr>
-              <td>12343</td>
-              <td>Pending</td>
-              <td>$3,000</td>
-              <td>08/21/2024</td>
-            </tr>
+            {recentOrders.length > 0 ? (
+              recentOrders.map(order => (
+                <tr key={order.orderNumber}>
+                  <td>{order.orderNumber}</td>
+                  <td>{order.status}</td>
+                  <td>{`NGN${order.totalAmount.toLocaleString()}`}</td>
+                  <td>{new Date(order.date).toLocaleDateString()}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4">No recent orders available.</td>
+              </tr>
+            )}
           </tbody>
         </table>
       </section>
 
-      {/* Notifications */}
-      <section className="notifications-section">
-        <h2>Notifications</h2>
-        <ul className="notifications-list">
-          <li>New product launch - Product X now available!</li>
-          <li>System maintenance scheduled for 08/25/2024.</li>
-          <li>New features added to the DMS platform.</li>
-        </ul>
-      </section>
-
-      {/* Activity Feed */}
-      <section className="activity-feed">
-        <h2>Recent Activity</h2>
-        <ul className="activity-list">
-          <li>Order #12345 submitted on 08/23/2024</li>
-          <li>Wallet topped up with $1,500 on 08/22/2024</li>
-          <li>Order #12343 updated on 08/21/2024</li>
-        </ul>
-      </section>
-
-      {/* Support Section */}
-      <section className="support-section">
-        <h2>Need Help?</h2>
-        <div className="support-links">
-          <Link to="/support">Contact Support</Link>
-          <Link to="/faq">FAQ</Link>
-        </div>
+      {/* Support and FAQs */}
+      <section className="support-faq">
+        <Link to="/support">Support</Link>
+        <Link to="/faq">FAQ</Link>
       </section>
     </div>
   );

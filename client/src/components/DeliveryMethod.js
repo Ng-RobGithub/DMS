@@ -1,6 +1,7 @@
-// client/src/components/DeliveryMethod.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './DeliveryMethod.css'; // Import the corresponding CSS file for styling
+import companyLogo from '../assets/NgRob.png'; // Import your company logo
 
 const DeliveryMethod = () => {
     const navigate = useNavigate();
@@ -13,12 +14,16 @@ const DeliveryMethod = () => {
     };
 
     return (
-        <div>
-            <h1>Select Delivery Method</h1>
+        <div className="delivery-method-container">
+            {/* Logo placed in the top left corner */}
+            <div className="logo-container">
+                <img src={companyLogo} alt="Company Logo" className="company-logo" />
+            </div>
+
+            <h1>Delivery Method</h1>
             <label>
-                Delivery Method:
                 <select onChange={handleMethodSelect}>
-                    <option value="">Select a method</option>
+                    <option value="">Select Delivery method</option>
                     <option value="Plant/Direct Delivery by NG-ROB">Plant/Direct Delivery by NG-ROB</option>
                     <option value="Self-Collection by Customer">Self-Collection by Customer</option>
                     <option value="CTES/CTES Plus">CTES/CTES Plus</option>

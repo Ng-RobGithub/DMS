@@ -1,3 +1,4 @@
+// /models/User.js
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
@@ -31,6 +32,10 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    walletBalance: { // Added wallet balance field
+        type: Number,
+        default: 0
     }
 });
 

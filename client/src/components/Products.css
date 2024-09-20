@@ -1,0 +1,85 @@
+/* Products.css */
+
+.products-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end; /* Aligns the logo to the right */
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  height: 60px; /* Adjust size as needed */
+  width: auto;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 20px;
+  font-size: 1.1em;
+}
+
+select {
+  padding: 8px;
+  font-size: 1em;
+}
+
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.product-item {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: calc(33% - 40px);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.product-item h2 {
+  margin: 10px 0;
+}
+
+.product-item p {
+  margin: 5px 0;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  background-color: #007bff;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.navigation-buttons button {
+  margin: 0 10px;
+}

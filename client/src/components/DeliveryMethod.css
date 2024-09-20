@@ -1,0 +1,65 @@
+/* client/src/components/DeliveryMethod.css */
+
+.delivery-method-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* Full-screen height */
+    background-color: #f8f9fa; /* Light background color */
+    padding: 20px;
+}
+
+.logo-container {
+    position: absolute;
+    top: 20px; /* Position the logo at the top */
+    left: 20px; /* Align the logo to the left */
+}
+
+.company-logo {
+    height: 80px; /* Adjust the size of the logo */
+    width: auto; /* Maintain aspect ratio */
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333; /* Darker text color */
+}
+
+label {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+select {
+    margin-left: 10px;
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+select:focus {
+    outline: none;
+    border-color: #007bff; /* Change border color when focused */
+}
+
+option {
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .company-logo {
+        height: 60px; /* Adjust logo size for smaller screens */
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    select {
+        font-size: 14px;
+    }
+}

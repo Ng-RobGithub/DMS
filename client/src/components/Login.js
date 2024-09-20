@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api';
 import './Login.css';
+import logo from '../assets/NgRob.png'; // Import your company logo
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -29,6 +30,10 @@ const Login = () => {
   return (
     <div className="login-container">
       <form onSubmit={handleSubmit} className="login-form">
+        {/* Add company logo */}
+        <div className="logo-container">
+          <img src={logo} alt="Company Logo" className="company-logo" />
+        </div>
         <div className="form-group">
           <input
             type="email"

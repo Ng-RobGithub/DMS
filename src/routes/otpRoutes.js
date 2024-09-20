@@ -1,15 +1,12 @@
 const express = require('express');
 const crypto = require('crypto');
-// const Twilio = require('twilio');
-// const Otp = require('../models/OTP'); // Adjust the path as per your directory structure
+const Otp = require('../models/OTP'); // Adjust the path as per your directory structure
+const { protect } = require('../middleware/authMiddleware'); // Import the protect middleware
 
 const router = express.Router();
 
-// Initialize Twilio client
-// const client = Twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-
-// Route to generate and send OTP
-router.post('/generate', async (req, res) => {
+// Route to generate and send OTP (protected)
+router.post('/generate', protect, async (req, res) => {
     const { phoneNumber } = req.body; // Assuming phone number is sent instead of email
 
     try {
@@ -38,8 +35,8 @@ router.post('/generate', async (req, res) => {
     }
 });
 
-// Route to verify OTP
-router.post('/verify', async (req, res) => {
+// Route to verify OTP (protected)
+router.post('/verify', protect, async (req, res) => {
     const { phoneNumber, otp } = req.body; // Assuming phone number is sent instead of email
 
     try {

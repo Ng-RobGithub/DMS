@@ -1,0 +1,36 @@
+/* client/src/components/PayPalPayment.css */
+.paypal-payment-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fafafa;
+    text-align: center;
+  }
+  
+  .paypal-payment-container h2 {
+    margin-bottom: 20px;
+  }
+  
+  .paypal-payment-container label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .paypal-payment-container input {
+    padding: 10px;
+    width: 100%;
+    margin-top: 5px;
+    font-size: 16px;
+  }
+  
+  .payment-status {
+    margin-top: 20px;
+    font-size: 16px;
+    color: green;
+  }
+  

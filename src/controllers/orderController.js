@@ -1,13 +1,49 @@
-const Order = require('../models/Order');
-const Dashboard = require('../models/Dashboard');
+const Order = require('../models/Order.js');
+const Dashboard = require('../models/Dashboard.js');
+const User = require('../models/User.js');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const { body, validationResult } = require('express-validator');
 const moment = require('moment'); // For date manipulation
 
+// Helper function to update dashboard
+const updateDashboard = async (userId, orderId, oldStatus, newStatus) => {
+  let dashboard = await Dashboard.findOne({ user: userId });
+
+  if (!dashboard) {
+    dashboard = new Dashboard({
+      user: userId,
+      orders: {
+        new: [],
+        saved: [],
+        submitted: []
+      }
+    });
+  }
+
+  // Remove order from the old status category
+  if (oldStatus === 'new') dashboard.orders.new.pull(orderId);
+  else if (oldStatus === 'saved') dashboard.orders.saved.pull(orderId);
+  else if (oldStatus === 'submitted') dashboard.orders.submitted.pull(orderId);
+
+  // Add the order to the new status category
+  if (newStatus === 'new') dashboard.orders.new.push(orderId);
+  else if (newStatus === 'saved') dashboard.orders.saved.push(orderId);
+  else if (newStatus === 'submitted') dashboard.orders.submitted.push(orderId);
+
+  await dashboard.save();
+};
+
 // Create a new order
-exports.createOrder = async (req, res) => {
+const createOrder = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const { products, status, totalAmount } = req.body;
 
   try {
-    // Create the order
     const newOrder = new Order({
       user: req.user.id,
       products,
@@ -17,31 +53,8 @@ exports.createOrder = async (req, res) => {
 
     const order = await newOrder.save();
 
-    // Find the dashboard for the user
-    let dashboard = await Dashboard.findOne({ user: req.user.id });
-
-    // If no dashboard exists, create one
-    if (!dashboard) {
-      dashboard = new Dashboard({
-        user: req.user.id,
-        orders: {
-          new: status === 'new' ? [order._id] : [],
-          saved: status === 'saved' ? [order._id] : [],
-          submitted: status === 'submitted' ? [order._id] : []
-        }
-      });
-    } else {
-      // Add the order to the appropriate category
-      if (status === 'new') {
-        dashboard.orders.new.push(order._id);
-      } else if (status === 'saved') {
-        dashboard.orders.saved.push(order._id);
-      } else if (status === 'submitted') {
-        dashboard.orders.submitted.push(order._id);
-      }
-    }
-
-    await dashboard.save();
+    // Update the dashboard
+    await updateDashboard(req.user.id, order._id, 'new', status);
 
     res.json(order);
   } catch (err) {
@@ -51,51 +64,32 @@ exports.createOrder = async (req, res) => {
 };
 
 // Update the status of an order
-exports.updateOrderStatus = async (req, res) => {
+const updateOrderStatus = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const { status } = req.body;
 
   try {
-    // Find the order by ID
     let order = await Order.findById(req.params.id);
 
     if (!order) {
       return res.status(404).json({ msg: 'Order not found' });
     }
 
-    // Check if the user is authorized
     if (order.user.toString() !== req.user.id) {
       return res.status(401).json({ msg: 'User not authorized' });
     }
 
-    // Get the previous status of the order
     const previousStatus = order.status;
 
-    // Update the status of the order
     order.status = status;
     await order.save();
 
-    // Find the dashboard for the user
-    const dashboard = await Dashboard.findOne({ user: req.user.id });
-
-    // Remove the order from the previous status category
-    if (previousStatus === 'new') {
-      dashboard.orders.new.pull(order._id);
-    } else if (previousStatus === 'saved') {
-      dashboard.orders.saved.pull(order._id);
-    } else if (previousStatus === 'submitted') {
-      dashboard.orders.submitted.pull(order._id);
-    }
-
-    // Add the order to the new status category
-    if (status === 'new') {
-      dashboard.orders.new.push(order._id);
-    } else if (status === 'saved') {
-      dashboard.orders.saved.push(order._id);
-    } else if (status === 'submitted') {
-      dashboard.orders.submitted.push(order._id);
-    }
-
-    await dashboard.save();
+    // Update the dashboard
+    await updateDashboard(req.user.id, order._id, previousStatus, status);
 
     res.json(order);
   } catch (err) {
@@ -105,7 +99,7 @@ exports.updateOrderStatus = async (req, res) => {
 };
 
 // Get all orders for the logged-in user
-exports.getOrders = async (req, res) => {
+const getOrders = async (req, res) => {
   try {
     const orders = await Order.find({ user: req.user.id }).sort({ date: -1 });
     res.json(orders);
@@ -116,7 +110,7 @@ exports.getOrders = async (req, res) => {
 };
 
 // Get a specific order by ID
-exports.getOrderById = async (req, res) => {
+const getOrderById = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
 
@@ -124,7 +118,6 @@ exports.getOrderById = async (req, res) => {
       return res.status(404).json({ msg: 'Order not found' });
     }
 
-    // Check if the user is authorized
     if (order.user.toString() !== req.user.id) {
       return res.status(401).json({ msg: 'User not authorized' });
     }
@@ -137,7 +130,7 @@ exports.getOrderById = async (req, res) => {
 };
 
 // Delete an order
-exports.deleteOrder = async (req, res) => {
+const deleteOrder = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
 
@@ -145,26 +138,14 @@ exports.deleteOrder = async (req, res) => {
       return res.status(404).json({ msg: 'Order not found' });
     }
 
-    // Check if the user is authorized
     if (order.user.toString() !== req.user.id) {
       return res.status(401).json({ msg: 'User not authorized' });
     }
 
     await order.remove();
 
-    // Find the dashboard for the user
-    const dashboard = await Dashboard.findOne({ user: req.user.id });
-
-    // Remove the order from the appropriate category
-    if (order.status === 'new') {
-      dashboard.orders.new.pull(order._id);
-    } else if (order.status === 'saved') {
-      dashboard.orders.saved.pull(order._id);
-    } else if (order.status === 'submitted') {
-      dashboard.orders.submitted.pull(order._id);
-    }
-
-    await dashboard.save();
+    // Update the dashboard
+    await updateDashboard(req.user.id, order._id, order.status, '');
 
     res.json({ msg: 'Order removed' });
   } catch (err) {
@@ -174,12 +155,10 @@ exports.deleteOrder = async (req, res) => {
 };
 
 // Get distributor performance by quarters
-exports.getQuarterlyPerformance = async (req, res) => {
+const getQuarterlyPerformance = async (req, res) => {
   try {
-    // Fetch all orders for the logged-in user
     const orders = await Order.find({ user: req.user.id }).select('date');
 
-    // Group orders by quarter
     const performanceData = {
       'Jan-Feb-Mar': 0,
       'Apr-May-Jun': 0,
@@ -196,7 +175,7 @@ exports.getQuarterlyPerformance = async (req, res) => {
       else if (month >= 6 && month <= 8) quarter = 'Jul-Aug-Sep';
       else if (month >= 9 && month <= 11) quarter = 'Oct-Nov-Dec';
 
-      if (quarter) performanceData[quarter] += 1; // Increment order count for the quarter
+      if (quarter) performanceData[quarter] += 1;
     });
 
     res.json(performanceData);
@@ -204,4 +183,90 @@ exports.getQuarterlyPerformance = async (req, res) => {
     console.error(err.message);
     res.status(500).send('Server error');
   }
+};
+
+// Refresh authentication token
+const refreshToken = async (req, res) => {
+  const { refreshToken } = req.body;
+
+  if (!refreshToken) {
+    return res.status(400).json({ msg: 'No refresh token provided' });
+  }
+
+  try {
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    const accessToken = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '15m' }
+    );
+
+    res.json({ accessToken });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+};
+
+// Create a new user
+const createUser = async (req, res) => {
+  const { name, email, password } = req.body;
+
+  try {
+    let user = await User.findOne({ email });
+
+    if (user) {
+      return res.status(400).json({ msg: 'User already exists' });
+    }
+
+    user = new User({
+      name,
+      email,
+      password: await bcrypt.hash(password, 10)
+    });
+
+    await user.save();
+
+    // Generate JWT token for the user
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    res.json({ token });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+};
+
+// Get total number of orders for the logged-in user
+const getOrderCount = async (req, res) => {
+  try {
+    const orderCount = await Order.countDocuments({ user: req.user.id });
+    res.json({ count: orderCount });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+};
+
+// Exporting all the functions
+module.exports = {
+  createOrder,
+  updateOrderStatus,
+  getOrders,
+  getOrderById,
+  deleteOrder,
+  getQuarterlyPerformance,
+  refreshToken,
+  createUser,  // New user creation function
+  getOrderCount // New order count function
 };

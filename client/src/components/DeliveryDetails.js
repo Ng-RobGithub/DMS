@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './DeliveryDetails.css';
+import companyLogo from '../assets/NgRob.png'; // Import the logo image
 
 const DeliveryDetails = () => {
     const [countries, setCountries] = useState([]);
@@ -58,7 +60,10 @@ const DeliveryDetails = () => {
     };
 
     return (
-        <div>
+        <div className="delivery-details-container">
+            {/* Add the company logo */}
+            <img src={companyLogo} alt="Company Logo" className="company-logo" />
+
             <h1>Delivery Details</h1>
             <div>
                 <label>

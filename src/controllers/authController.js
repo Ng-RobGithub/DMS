@@ -1,49 +1,46 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User'); // Assuming User model is correctly set up
+const bcrypt = require('bcryptjs');
 
-// Registration Controller
+// Helper function to generate JWT
+const generateToken = (userId) => {
+    return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
+};
+
+// Register Controller
 const register = async (req, res) => {
     const { fullName, email, phoneNumber, country, company, customerId, password } = req.body;
 
     try {
         // Check if the user already exists
-        let user = await User.findOne({ email });
-        if (user) {
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
             return res.status(400).json({ message: 'User already exists' });
         }
 
+        // Hash password before saving
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         // Create a new user
-        user = new User({
+        const user = new User({
             fullName,
             email,
             phoneNumber,
             country,
             company,
             customerId,
-            password // Password will be hashed by the pre-save middleware
+            password: hashedPassword
         });
 
         await user.save();
 
         // Return JWT
-        const payload = {
-            user: {
-                id: user.id
-            }
-        };
-
-        const token = jwt.sign(
-            payload,
-            process.env.JWT_SECRET,
-            { expiresIn: '1h' }
-        );
-
+        const token = generateToken(user.id);
         res.status(201).json({ token });
     } catch (err) {
-        console.error(err.message);
+        console.error('Error in register:', err.message);
         res.status(500).send('Server error');
     }
 };
@@ -60,27 +57,16 @@ const login = async (req, res) => {
         }
 
         // Check password
-        const isMatch = await user.matchPassword(password);
+        const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Incorrect email or password.' });
         }
 
         // Generate JWT
-        const payload = {
-            user: {
-                id: user.id
-            }
-        };
-
-        const token = jwt.sign(
-            payload,
-            process.env.JWT_SECRET,
-            { expiresIn: '1h' }
-        );
-
+        const token = generateToken(user.id);
         res.json({ token });
     } catch (err) {
-        console.error(err.message);
+        console.error('Error in login:', err.message);
         res.status(500).send('Server error');
     }
 };
@@ -97,7 +83,7 @@ const requestPasswordReset = async (req, res) => {
 
         // Generate a reset token
         const resetToken = crypto.randomBytes(20).toString('hex');
-        user.resetPasswordToken = resetToken;
+        user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex'); // Hashing reset token
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 
         await user.save();
@@ -111,25 +97,23 @@ const requestPasswordReset = async (req, res) => {
             },
         });
 
+        const resetUrl = `http://${req.headers.host}/reset-password/${resetToken}`;
         const mailOptions = {
             to: user.email,
             from: process.env.EMAIL_USERNAME,
             subject: 'Password Reset Request',
-            text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
-                   Please click on the following link, or paste this into your browser to complete the process:\n\n
-                   http://${req.headers.host}/reset-password/${resetToken}\n\n
-                   If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+            text: `You requested a password reset. Click the link to reset your password:\n\n${resetUrl}\n\nIf you did not request this, please ignore this email.`,
         };
 
-        transporter.sendMail(mailOptions, (err, response) => {
+        transporter.sendMail(mailOptions, (err) => {
             if (err) {
-                console.error('There was an error sending the email:', err);
+                console.error('Error sending reset email:', err);
                 return res.status(500).send('Error sending reset email');
             }
             res.status(200).json({ message: 'Password reset email sent' });
         });
     } catch (err) {
-        console.error(err.message);
+        console.error('Error in requestPasswordReset:', err.message);
         res.status(500).send('Server error');
     }
 };
@@ -139,8 +123,9 @@ const resetPassword = async (req, res) => {
     const { token, newPassword } = req.body;
 
     try {
+        const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
         const user = await User.findOne({
-            resetPasswordToken: token,
+            resetPasswordToken: hashedToken,
             resetPasswordExpires: { $gt: Date.now() },
         });
 
@@ -148,15 +133,15 @@ const resetPassword = async (req, res) => {
             return res.status(400).json({ message: 'Invalid or expired token' });
         }
 
-        user.password = newPassword;
+        // Update password and clear reset token
+        user.password = await bcrypt.hash(newPassword, 10);
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
 
         await user.save();
-
         res.status(200).json({ message: 'Password has been reset successfully' });
     } catch (err) {
-        console.error(err.message);
+        console.error('Error in resetPassword:', err.message);
         res.status(500).send('Server error');
     }
 };
@@ -164,12 +149,14 @@ const resetPassword = async (req, res) => {
 // Update User Profile Controller
 const updateUserProfile = async (req, res) => {
     const { fullName, phoneNumber, country, company, customerId } = req.body;
+
     try {
-        const user = await User.findById(req.user);
+        const user = await User.findById(req.user.id);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
+        // Update fields if provided, else retain old values
         user.fullName = fullName || user.fullName;
         user.phoneNumber = phoneNumber || user.phoneNumber;
         user.country = country || user.country;
@@ -177,10 +164,9 @@ const updateUserProfile = async (req, res) => {
         user.customerId = customerId || user.customerId;
 
         await user.save();
-
         res.status(200).json({ message: 'Profile updated successfully' });
     } catch (err) {
-        console.error(err.message);
+        console.error('Error in updateUserProfile:', err.message);
         res.status(500).send('Server error');
     }
 };
@@ -196,22 +182,35 @@ const deleteUser = async (req, res) => {
         await user.remove();
         res.status(200).json({ message: 'User deleted successfully' });
     } catch (err) {
-        console.error(err.message);
+        console.error('Error in deleteUser:', err.message);
         res.status(500).send('Server error');
     }
 };
 
 // Get All Users Controller
 const getUsers = async (req, res) => {
+    const { page = 1, limit = 10 } = req.query;
+
     try {
-        const users = await User.find().select('-password'); // Exclude password field
-        res.status(200).json(users);
+        const users = await User.find()
+            .select('-password')
+            .limit(Number(limit))
+            .skip((page - 1) * limit)
+            .exec();
+
+        const count = await User.countDocuments();
+        res.status(200).json({
+            users,
+            totalPages: Math.ceil(count / limit),
+            currentPage: page
+        });
     } catch (err) {
-        console.error(err.message);
+        console.error('Error in getUsers:', err.message);
         res.status(500).send('Server error');
     }
 };
 
+// Export all controllers
 module.exports = {
     register,
     login,

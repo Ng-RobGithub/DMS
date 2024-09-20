@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './ScheduleDeliverySummary.css';
+import logo from '../assets/NgRob.png'; // Update the path based on your project structure
 
 const ScheduleDeliverySummary = () => {
     const navigate = useNavigate();
@@ -11,10 +12,9 @@ const ScheduleDeliverySummary = () => {
         paymentDate, deliveryDate, truckSize, deliveryAddress
     } = location.state || {};
 
-    const [otp, setOtp] = useState('');
-    const [otpSent, setOtpSent] = useState(false);
-    const [enteredOtp, setEnteredOtp] = useState('');
     const [orderCreated, setOrderCreated] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const handleBack = () => {
         navigate('/schedule-delivery', { state: location.state });
@@ -24,55 +24,60 @@ const ScheduleDeliverySummary = () => {
         navigate('/');
     };
 
-    const generateOtp = () => {
-        return Math.floor(100000 + Math.random() * 900000).toString(); // Generates a 6-digit OTP
-    };
-
     const handleCheckout = async () => {
+        setLoading(true);
+        setError('');
         try {
-            const generatedOtp = generateOtp();
-            setOtp(generatedOtp);
+            const token = localStorage.getItem('token');
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            };
 
-            // Send OTP to the user's email
-            const response = await axios.post('/api/otp/send', {
-                otp: generatedOtp,
-                email: 'ngrob4real@gmail.com' // Replace with the actual user email
-            });
-            console.log(response.data.message);
-            setOtpSent(true);
+            // Replace this with your actual API for order creation
+            const response = await axios.post('/api/delivery/checkout', {
+                paymentReference,
+                paymentDate,
+                deliveryDate,
+                truckSize,
+                deliveryAddress,
+                deliveryState,
+                deliveryCountry
+            }, config);
+
+            if (response.data.success) {
+                const parentOrderNumber = `ORD-${Math.floor(Math.random() * 1000000)}`;
+                console.log(`Order created with Parent Order Number: ${parentOrderNumber}`);
+                setOrderCreated(true);
+
+                const orderSummary = `
+                    Order Successfully Created with Parent Order Number: ${parentOrderNumber}
+                    Payment Reference: ${paymentReference}
+                    Payment Date: ${paymentDate}
+                    Delivery Date: ${deliveryDate}
+                    Truck Size: ${truckSize}
+                    Delivery Address: ${deliveryAddress}
+                    Delivery State: ${deliveryState}
+                    Delivery Country: ${deliveryCountry}
+                `;
+                console.log(`Order summary sent to user's email: ${orderSummary}`);
+                alert('Order summary sent to your email.');
+            } else {
+                setError('Failed to create the order. Please try again.');
+            }
         } catch (error) {
-            console.error('Error sending OTP:', error.response?.data || error.message);
-            alert('Failed to send OTP. Please try again.');
-        }
-    };
-
-    const handleValidateOtp = () => {
-        if (enteredOtp === otp) {
-            // Simulate order creation
-            const parentOrderNumber = `ORD-${Math.floor(Math.random() * 1000000)}`;
-            console.log(`Order created with Parent Order Number: ${parentOrderNumber}`);
-            setOrderCreated(true);
-
-            // Simulate sending order summary to user's email
-            const orderSummary = `
-                Order Successfully Created with Parent Order Number: ${parentOrderNumber}
-                Payment Reference: ${paymentReference}
-                Payment Date: ${paymentDate}
-                Delivery Date: ${deliveryDate}
-                Truck Size: ${truckSize}
-                Delivery Address: ${deliveryAddress}
-                Delivery State: ${deliveryState}
-                Delivery Country: ${deliveryCountry}
-            `;
-            console.log(`Order summary sent to user's email: ${orderSummary}`);
-            alert('Order summary sent to your email.');
-        } else {
-            alert('Invalid OTP. Please try again.');
+            console.error('Error during checkout:', error.response?.data || error.message);
+            setError('Failed to create the order. Please try again.');
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <div className="schedule-delivery-summary-container">
+            <img src={logo} alt="Company Logo" className="logo" />
             <h1>Delivery Summary</h1>
             <div className="summary">
                 <p><strong>Payment Reference:</strong> {paymentReference}</p>
@@ -86,18 +91,10 @@ const ScheduleDeliverySummary = () => {
             <div className="summary-buttons">
                 <button onClick={handleBack}>&lt;&lt; Back</button>
                 <button onClick={handleCancel}>Cancel</button>
+                {loading && <p>Loading...</p>}
+                {error && <p className="error">{error}</p>}
                 {orderCreated ? (
                     <p>Order Successfully Created</p>
-                ) : otpSent ? (
-                    <>
-                        <input
-                            type="text"
-                            placeholder="Enter OTP"
-                            value={enteredOtp}
-                            onChange={(e) => setEnteredOtp(e.target.value)}
-                        />
-                        <button onClick={handleValidateOtp}>Validate OTP</button>
-                    </>
                 ) : (
                     <button onClick={handleCheckout}>Checkout</button>
                 )}

@@ -1,5 +1,5 @@
 const Otp = require('../models/OTP'); // Adjust the path as per your directory structure
-const { generateOTP, sendOtpSms, verifyOTP } = require('../utils/otpUtils');
+const { generateOTP, sendOtpSms } = require('../utils/otpUtils');
 
 // Generate and send OTP
 const generateOtp = async (req, res) => {

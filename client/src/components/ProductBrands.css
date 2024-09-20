@@ -1,0 +1,80 @@
+/* client/src/components/ProductBrands.css */
+.product-brands-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.company-logo {
+    width: 150px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    width: 60%;
+    padding: 10px;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.brand-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.brand-list li {
+    margin: 10px 0;
+}
+
+.brand-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 60%;
+}
+
+.brand-button:hover {
+    background-color: #45a049;
+}
+
+.button-container {
+    margin-top: 20px;
+}
+
+.back-button, .cancel-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0 10px;
+}
+
+.back-button {
+    background-color: #007BFF;
+    color: white;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+.cancel-button {
+    background-color: #FF0000;
+    color: white;
+}
+
+.cancel-button:hover {
+    background-color: #b30000;
+}

@@ -14,7 +14,10 @@ const protect = async (req, res, next) => {
     try {
         // Extract token from Authorization header
         const authHeader = req.headers.authorization;
-        const token = authHeader?.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
+        const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
+
+        // Log the token for debugging purposes (remove in production)
+        console.log('Extracted Token:', token);
 
         // If token doesn't exist, deny access
         if (!token) {
@@ -23,8 +26,9 @@ const protect = async (req, res, next) => {
 
         // Verify the JWT token
         const decoded = jwt.verify(token, JWT_SECRET);
+        console.log('Decoded Token:', decoded); // Log for debugging
 
-        // Ensure the decoded token contains user data (user object or id)
+        // Ensure the decoded token contains user data
         if (!decoded || !decoded.user || !decoded.user.id) {
             return res.status(401).json({ message: 'Authorization denied: Invalid token payload' });
         }
@@ -40,12 +44,15 @@ const protect = async (req, res, next) => {
         // Proceed to the next middleware or route handler
         next();
     } catch (err) {
+        console.error('Error in authentication middleware:', err);
+
+        // Handle different JWT errors
         if (err.name === 'TokenExpiredError') {
             return res.status(401).json({ message: 'Token expired, please log in again' });
         } else if (err.name === 'JsonWebTokenError') {
             return res.status(401).json({ message: 'Invalid token' });
         } else {
-            console.error('Error in authentication middleware:', err);
+            // General server error
             return res.status(500).json({ message: 'Server error' });
         }
     }

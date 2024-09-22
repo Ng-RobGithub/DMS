@@ -6,17 +6,17 @@ const DashboardSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User', 
     required: true, 
-    index: true  // Add an index for performance
+    index: true  // Indexed for fast user-based queries
   },
   totalWalletBalance: { 
     type: Number, 
     default: 0, 
-    min: 0  // Ensure total wallet balance is non-negative
+    min: 0  // Ensure non-negative balance
   },
   availableBalance: { 
     type: Number, 
     default: 0, 
-    min: 0  // Ensure available balance is non-negative
+    min: 0  // Ensure non-negative available balance
   },
   orders: {
     new: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
@@ -28,11 +28,12 @@ const DashboardSchema = new mongoose.Schema({
     default: Date.now 
   }
 }, { 
-  timestamps: true  // Automatically add createdAt and updatedAt fields
+  timestamps: true  // Automatically manages createdAt and updatedAt
 });
 
 // Custom method to calculate the total wallet balance
 DashboardSchema.methods.calculateTotalWalletBalance = function() {
+  // You can add any logic here if bonuses or other amounts are factored into the total wallet balance
   return this.totalWalletBalance;
 };
 

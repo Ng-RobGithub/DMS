@@ -61,9 +61,12 @@ requiredEnvVars.forEach((envVar) => {
 
 const app = express(); // Initialize Express app
 
-// Use CORS middleware
+// Use CORS middleware with more specific options
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000', // Your frontend URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allow headers including Authorization
+    credentials: true, // Allow credentials (cookies, headers, etc.)
     optionsSuccessStatus: 200 // For legacy browser support
 }));
 

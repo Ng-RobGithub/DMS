@@ -17,14 +17,14 @@ const getDashboard = async (req, res) => {
         const orders = await Order.find({ user: req.user.id });
 
         // Calculate the total wallet balance and available balance
-        const totalWalletBalance = dashboard.calculateTotalBalance(); // Use the custom method if needed
-        const availableBalance = dashboard.availableBalance; // Use updated field names
+        const totalWalletBalance = dashboard.totalWalletBalance; // Ensure this is stored in the dashboard
+        const availableBalance = dashboard.availableBalance; // Use the field names you need
 
         // Send the dashboard data as response
         res.json({
-            totalWalletBalance, // Updated field name
-            availableBalance,   // Updated field name
-            ordersCount: orders.length // Example additional data
+            totalWalletBalance, // Total money in the user's wallet including bonuses
+            availableBalance,   // Amount available for placing an order
+            ordersCount: orders.length // Number of orders the user has placed
         });
     } catch (err) {
         console.error('Error fetching dashboard data:', err);
@@ -35,7 +35,7 @@ const getDashboard = async (req, res) => {
 // Update the dashboard data for the logged-in user
 const updateDashboard = async (req, res) => {
     try {
-        const { totalWalletBalance, availableBalance } = req.body; // Updated field names
+        const { totalWalletBalance, availableBalance } = req.body;
 
         // Validate input
         if (typeof totalWalletBalance !== 'number' || totalWalletBalance < 0) {
@@ -52,8 +52,8 @@ const updateDashboard = async (req, res) => {
             return res.status(404).json({ error: 'Dashboard not found' });
         }
 
-        // Update the dashboard
-        dashboard.ledgerBalance = totalWalletBalance - availableBalance; // Adjust logic if needed
+        // Update the dashboard with new balances
+        dashboard.totalWalletBalance = totalWalletBalance;
         dashboard.availableBalance = availableBalance;
 
         await dashboard.save();

@@ -2,23 +2,17 @@ import axios from 'axios';
 
 // Create an Axios instance with a base URL
 const api = axios.create({
-  baseURL:'http://localhost:5000/api' // Adjust this URL to your backend's base URL
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api' // Adjust this URL to your backend's base URL
 });
 
 // Request interceptor to add token to headers
 api.interceptors.request.use(
   config => {
-    const hardcodedToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YTY3.fGcYxJ0k_gSnghZdWEDq5riL1Exgy8-iT-8_xdvr73U';
-   
-    // const token = localStorage.getItem('token')?.trim();
-   console.log('Using hardcoded token:', hardcodedToken);
-    // if (token) {
-      if (hardcodedToken.split('.').length === 3) {
-      config.headers.Authorization = `Bearer ${hardcodedToken}`;
-      }else {
-        console.error('Invalid JWT format');
-      }
-    // }
+    const token = localStorage.getItem('token')?.trim();
+    console.log('Token being sent:', token); // Get the token from localStorage
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`; // Add token to Authorization header
+    }
     return config;
   },
   error => {

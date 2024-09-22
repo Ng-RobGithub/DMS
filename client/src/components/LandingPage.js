@@ -12,7 +12,7 @@ const LandingPage = () => {
           <img src={logo} alt="App Logo" className="logo-image" />
         </div>
         <nav>
-          <Link to="/about">About Us</Link>
+          <Link to="/dashboard">About Us</Link>
           <Link to="/features">Features</Link>
           <Link to="/contact">Contact</Link>
           <Link to="/login" className="login-button">Login</Link>

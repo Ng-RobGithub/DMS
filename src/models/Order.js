@@ -1,20 +1,20 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
-const orderSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    paymentReference: { type: String, required: true },
-    paymentDate: { type: Date, required: true },
-    deliveryDate: { type: Date, required: true },
-    truckSize: { type: String, required: true },
-    deliveryAddress: { type: String, required: true },
-    deliveryState: { type: String, required: true },
-    deliveryCountry: { type: String, required: true },
-    totalAmount: { type: Number, required: true },
-    parentOrderNumber: { type: String, unique: true, required: true },
-    status: { type: String, default: 'Pending' }, // Order status (e.g., Pending, Completed)
-}, {
-    timestamps: true // Automatically adds createdAt and updatedAt fields
+const orderSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  parentOrderNumber: { type: String,},
+  totalAmount: { type: Number },
+  paymentReference: { type: String },
+  paymentDate: { type: Date },
+  deliveryDate: { type: Date },
+  truckSize: { type: String },
+  deliveryAddress: { type: String },
+  deliveryState: { type: String },
+  deliveryCountry: { type: String },
+  status: { type: String, default: 'Pending', enum: ['Pending', 'Saved'] },
 });
 
+
 module.exports = mongoose.model('Order', orderSchema);
+
+

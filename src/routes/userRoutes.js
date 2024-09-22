@@ -46,4 +46,10 @@ router.get('/', protect, (req, res) => { // Use `protect` middleware
   userController.getUsers(req, res);
 });
 
+// Get single user
+router.get('/profile', protect, (req, res) => { // Use `protect` middleware
+  userController.getUserProfile(req, res);
+});
+
+
 module.exports = router;

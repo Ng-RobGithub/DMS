@@ -35,8 +35,8 @@ const ScheduleDeliverySummary = () => {
                     Authorization: `Bearer ${token}`
                 }
             };
-
-            // Replace this with your actual API for order creation
+    
+            // Send the request to create an order
             const response = await axios.post('http://localhost:5000/api/delivery/checkout', {
                 paymentReference,
                 paymentDate,
@@ -46,24 +46,12 @@ const ScheduleDeliverySummary = () => {
                 deliveryState,
                 deliveryCountry
             }, config);
-
+    
             if (response.data.success) {
-                const parentOrderNumber = `ORD-${Math.floor(Math.random() * 1000000)}`;
+                const { parentOrderNumber } = response.data;  // Extract parentOrderNumber
                 console.log(`Order created with Parent Order Number: ${parentOrderNumber}`);
                 setOrderCreated(true);
-
-                const orderSummary = `
-                    Order Successfully Created with Parent Order Number: ${parentOrderNumber}
-                    Payment Reference: ${paymentReference}
-                    Payment Date: ${paymentDate}
-                    Delivery Date: ${deliveryDate}
-                    Truck Size: ${truckSize}
-                    Delivery Address: ${deliveryAddress}
-                    Delivery State: ${deliveryState}
-                    Delivery Country: ${deliveryCountry}
-                `;
-                console.log(`Order summary sent to user's email: ${orderSummary}`);
-                alert('Order summary sent to your email.');
+                alert(`Order summary sent to your email. Parent Order Number: ${parentOrderNumber}`);
             } else {
                 setError('Failed to create the order. Please try again.');
             }
@@ -74,7 +62,7 @@ const ScheduleDeliverySummary = () => {
             setLoading(false);
         }
     };
-
+    
     return (
         <div className="schedule-delivery-summary-container">
             <img src={logo} alt="Company Logo" className="logo" />

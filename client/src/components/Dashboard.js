@@ -22,80 +22,66 @@ const Dashboard = () => {
   });
   const [totalWalletBalance, setTotalWalletBalance] = useState(0);
   const [availableBalance, setAvailableBalance] = useState(0);
-  const [orderCounts, setOrderCounts] = useState({
-    newOrders: 0,
-    savedOrders: 0,
-    pendingOrders: 0,
-    submittedOrders: 0,
-  });
-  const [recentOrders, setRecentOrders] = useState([]);
+ 
+  // const [recentOrders, setRecentOrders] = useState([]);
   const [fullName, setFullName] = useState(''); // State to hold the user's name
+  const [order, setOrder] = useState([]); // State to hold the user's name
+
+  // check pending orders
+  const pending = order?.filter(order => order?.status === "Pending");
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        // Fetch user info
-        const userResponse = await api.get('/user'); // Use the api utility for authenticated request
-        console.log("User Response:", userResponse); // Add this log
-        setFullName(userResponse.data.fullName); // Set the user's name from the response
-
-        // Fetch wallet balance
-        const walletResponse = await api.get('/dashboard'); // Adjust endpoint as needed
-        console.log("Wallet Response:", walletResponse); // Add this log
+        const userResponse = await api.get('/users/profile');
+        setFullName(userResponse.data.fullName);
+  
+        const walletResponse = await api.get('/wallet');
         setTotalWalletBalance(walletResponse.data.totalWalletBalance);
         setAvailableBalance(walletResponse.data.availableBalance);
-
-        // Fetch order counts
-        const ordersResponse = await api.get('/orders/counts');
-        console.log("Order Counts Response:", ordersResponse); // Add this log
-        setOrderCounts(ordersResponse.data);
-
-        // Fetch order data
+  
         const ordersDataResponse = await api.get('/orders');
-        console.log("Orders Data Response:", ordersDataResponse); // Add this log
-        const ordersDataJson = ordersDataResponse.data;
-        const ordersByQuarter = [0, 0, 0, 0]; // Initialize array for four quarters
-
-        ordersDataJson.forEach(order => {
-          const orderDate = new Date(order.date);
-          const month = orderDate.getMonth() + 1; // getMonth() is zero-indexed
-
+        const orders = ordersDataResponse.data;
+        setOrder(orders); // Set the full list of orders
+  
+        // Calculate the number of orders for each quarter based on paymentDate
+        const quarterlyOrders = [0, 0, 0, 0]; // Array to hold counts for each quarter
+  
+        orders.forEach(order => {
+          const paymentDate = new Date(order.paymentDate); // Using paymentDate to calculate the quarter
+          const month = paymentDate.getMonth() + 1; // getMonth() is zero-indexed (0 for January, so +1)
+  
           if (month >= 1 && month <= 3) {
-            ordersByQuarter[0]++;
+            quarterlyOrders[0]++; // Jan-Feb-Mar
           } else if (month >= 4 && month <= 6) {
-            ordersByQuarter[1]++;
+            quarterlyOrders[1]++; // Apr-May-Jun
           } else if (month >= 7 && month <= 9) {
-            ordersByQuarter[2]++;
+            quarterlyOrders[2]++; // Jul-Aug-Sep
           } else if (month >= 10 && month <= 12) {
-            ordersByQuarter[3]++;
+            quarterlyOrders[3]++; // Oct-Nov-Dec
           }
         });
-
+  
+        // Update the chart data with calculated quarterly order counts
         setPerformanceData({
           labels: ['Jan-Feb-Mar', 'Apr-May-Jun', 'Jul-Aug-Sep', 'Oct-Nov-Dec'],
           datasets: [
             {
               label: 'Total Orders Raised',
-              data: ordersByQuarter, // Use the calculated data
+              data: quarterlyOrders, // Use the calculated quarterly data
               backgroundColor: '#4caf50',
             },
           ],
         });
-
-        // Fetch recent orders
-        const recentOrdersResponse = await api.get('/orders/recent');
-        console.log("Recent Orders Response:", recentOrdersResponse); // Add this log
-        setRecentOrders(recentOrdersResponse.data);
-
+  
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
-        alert('Failed to load dashboard data.');
       }
     };
-
+  
     fetchDashboardData();
-  }, []); // Empty dependency array to run once on mount
-
+  }, []);
+   
   return (
     <div className="dashboard-container">
       {/* Logo */}
@@ -105,7 +91,7 @@ const Dashboard = () => {
 
       {/* Welcome Section */}
       <section className="welcome-section">
-        <h1>Welcome back, {fullName}!</h1>
+        <h1>Welcome back, {fullName ?? "John Doe"}!</h1>
         <p>Today is {new Date().toLocaleDateString()}</p>
       </section>
 
@@ -124,16 +110,16 @@ const Dashboard = () => {
       {/* Order Status Buttons */}
       <section className="order-status-buttons">
         <Link to="/orders/new" className="order-btn">
-          New Orders <span className="badge">{orderCounts.newOrders}</span>
+          New Orders <span className="badge">0</span>
         </Link>
         <Link to="/orders/saved" className="order-btn">
-          Saved Orders <span className="badge">{orderCounts.savedOrders}</span>
+          Saved Orders <span className="badge">0</span>
         </Link>
         <Link to="/orders/pending" className="order-btn">
-          Pending Orders <span className="badge">{orderCounts.pendingOrders}</span>
+          Pending Orders <span className="badge">{pending?.length}</span>
         </Link>
         <Link to="/orders/submitted" className="order-btn">
-          Submitted Orders <span className="badge">{orderCounts.submittedOrders}</span>
+          Submitted Orders <span className="badge">{order?.length ?? 0}</span>
         </Link>
       </section>
 
@@ -155,7 +141,7 @@ const Dashboard = () => {
               <th>Date</th>
             </tr>
           </thead>
-          <tbody>
+          {/* <tbody>
             {recentOrders.length > 0 ? (
               recentOrders.map(order => (
                 <tr key={order.orderNumber}>
@@ -170,7 +156,7 @@ const Dashboard = () => {
                 <td colSpan="4">No recent orders available.</td>
               </tr>
             )}
-          </tbody>
+          </tbody> */}
         </table>
       </section>
 

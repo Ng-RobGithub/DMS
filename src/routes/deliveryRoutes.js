@@ -3,32 +3,6 @@ const router = express.Router();
 const { protect } = require('../middleware/authMiddleware'); // Ensure this is correctly implemented
 const Order = require('../models/Order'); // Import your Order model
 
-// Example data for countries and states
-const countries = ['Nigeria'];
-const states = {
-  'Nigeria': ['Abia', 'Adamawa', 'Akwa Ibom', 'Anambra', 'Bauchi', 'Bayelsa', 'Benue', 'Delta', 'Rivers', 'Cross River', 'Lagos', 'Imo'],
-};
-
-// Route to get countries
-router.get('/countries', (req, res) => {
-  res.json(countries);
-});
-
-// Route to get states based on the country
-router.get('/states/:country', (req, res) => {
-  const country = req.params.country;
-  if (states[country]) {
-    res.json(states[country]);
-  } else {
-    res.status(400).json({ message: 'Country not found' });
-  }
-});
-
-/**
- * @route   POST /api/delivery/checkout
- * @desc    Create a new delivery order
- * @access  Private (Protected route using token-based auth)
- */
 router.post('/checkout', protect, async (req, res) => {
   const {
     paymentReference,
@@ -37,8 +11,8 @@ router.post('/checkout', protect, async (req, res) => {
     truckSize,
     deliveryAddress,
     deliveryState,
-    deliveryCountry
-  } = req.body;
+    deliveryCountry,
+  } = req.body; // No need to include totalAmount if it's unused
 
   // Validate the required fields
   if (!paymentReference || !paymentDate || !deliveryDate || !truckSize || !deliveryAddress || !deliveryState || !deliveryCountry) {
@@ -46,7 +20,10 @@ router.post('/checkout', protect, async (req, res) => {
   }
 
   try {
-    const userId = req.user.id; // Get user ID from token
+    const userId = req.user.id;
+
+    // Generate parentOrderNumber
+    const parentOrderNumber = `ORD-${Math.floor(Math.random() * 1000000)}`;
 
     // Create a new order
     const newOrder = new Order({
@@ -57,16 +34,17 @@ router.post('/checkout', protect, async (req, res) => {
       truckSize,
       deliveryAddress,
       deliveryState,
-      deliveryCountry
+      deliveryCountry,
+      parentOrderNumber,  // Make sure this is used and saved
     });
 
-    // Save the order to the database
     await newOrder.save();
 
     res.status(201).json({
       success: true,
       message: 'Order created successfully',
-      orderId: newOrder._id
+      orderId: newOrder._id,
+      parentOrderNumber,  // Include in the response
     });
   } catch (error) {
     console.error('Error creating order:', error);

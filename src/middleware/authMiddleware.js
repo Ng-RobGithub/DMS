@@ -16,30 +16,37 @@ const protect = async (req, res, next) => {
         const authHeader = req.headers.authorization;
         const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
 
-        // Log the token for debugging purposes (remove in production)
+        // Log the extracted token
         console.log('Extracted Token:', token);
 
         // If token doesn't exist, deny access
         if (!token) {
+            console.log('Authorization denied: No token provided');
             return res.status(401).json({ message: 'Authorization denied: No token provided' });
         }
 
         // Verify the JWT token
         const decoded = jwt.verify(token, JWT_SECRET);
-        console.log('Decoded Token:', decoded); // Log for debugging
+        console.log('Decoded Token:', decoded); // Log the decoded token
 
-        // Ensure the decoded token contains user data
-        if (!decoded || !decoded.user || !decoded.user.id) {
+        // Check if the decoded token contains the user ID
+        if (!decoded || !decoded.id) {
+            console.log('Authorization denied: Invalid token payload');
             return res.status(401).json({ message: 'Authorization denied: Invalid token payload' });
         }
 
-        req.user = decoded.user;
+        // Set user ID from the token to the request object
+        req.user = { id: decoded.id };
 
         // Check if the user exists in the database
         const user = await User.findById(req.user.id);
         if (!user) {
+            console.log('Authorization denied: User not found');
             return res.status(401).json({ message: 'Authorization denied: User not found' });
         }
+
+        // Log the user found
+        console.log('User found:', user);
 
         // Proceed to the next middleware or route handler
         next();

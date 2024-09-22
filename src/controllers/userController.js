@@ -11,7 +11,7 @@ exports.registerUser = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { fullName, email, password } = req.body;
+  const { fullName, email } = req.body;
 
   try {
     let user = await User.findOne({ email });
@@ -23,7 +23,6 @@ exports.registerUser = async (req, res) => {
     user = new User({
       fullName,
       email,
-      password
     });
 
     // Encrypt password before saving
@@ -95,5 +94,19 @@ exports.getUsers = async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
+  }
+};
+
+
+exports.getUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
   }
 };

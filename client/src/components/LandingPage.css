@@ -1,63 +1,173 @@
+/* LandingPage.css */
+
+/* General Styles */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f8f9fa;
+}
+
 .landing-page {
-  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
 }
 
 .landing-header {
   display: flex;
   justify-content: space-between;
-  align-items: center; /* Ensure vertical alignment */
-  padding: 1rem;
-  background: #f8f8f8;
-}
-
-.landing-header .logo {
-  display: flex;
   align-items: center;
-}
-
-.landing-header .logo img {
-  height: 40px; /* Adjust size as needed */
-  width: auto;
-}
-
-.landing-header nav a {
-  margin: 0 1rem;
-}
-
-.hero {
-  text-align: center;
-  padding: 2rem;
-  background: #4caf50;
+  padding: 10px;
+  background-color: #343a40;
   color: white;
 }
 
-.hero .cta-buttons {
-  margin-top: 1rem;
+.landing-header nav a {
+  margin: 0 10px;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.login-button {
+  padding: 8px 15px;
+  background-color: #17a2b8;
+  border-radius: 4px;
+  font-size: 14px;
+  color: white;
+}
+
+.logo-image {
+  height: 40px;
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 40px 10px;
+  background-color: #007bff;
+  color: white;
+}
+
+.hero h1 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-direction: column;
 }
 
 .cta-button {
-  margin: 0 0.5rem;
-  padding: 0.5rem 1rem;
-  background: #ffffff;
-  color: #4caf50;
-  text-decoration: none;
-  border-radius: 5px;
+  padding: 12px;
+  background-color: #28a745;
+  color: white;
+  text-align: center;
+  border-radius: 4px;
+  font-size: 16px;
+  margin-bottom: 10px;
 }
 
-.features, .benefits, .how-it-works {
-  padding: 2rem;
+/* Features Section */
+.features {
+  text-align: center;
+  padding: 20px 10px;
 }
 
-.feature-item, .testimonial {
-  margin-bottom: 1rem;
+.features h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
 }
 
+.feature-item {
+  margin: 10px 0;
+}
+
+.feature-item img {
+  height: 100px;
+  margin-bottom: 10px;
+}
+
+.feature-item h3 {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+}
+
+.feature-item p {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* Benefits Section */
+.benefits {
+  text-align: center;
+  padding: 20px 10px;
+}
+
+.benefits h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.benefits p {
+  font-size: 1rem;
+}
+
+.testimonial {
+  font-style: italic;
+  background-color: #e9ecef;
+  padding: 10px;
+  border-radius: 8px;
+  margin: 10px auto;
+  font-size: 0.9rem;
+}
+
+/* How It Works Section */
+.how-it-works {
+  text-align: center;
+  padding: 20px 10px;
+}
+
+.how-it-works h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.how-it-works ol {
+  font-size: 1rem;
+  margin: 0 auto;
+}
+
+.how-it-works li {
+  margin-bottom: 8px;
+}
+
+/* Footer */
 .landing-footer {
-  background: #f8f8f8;
-  padding: 1rem;
+  background-color: #343a40;
+  color: white;
+  padding: 10px;
   text-align: center;
 }
 
-.landing-footer .social-media a {
-  margin: 0 0.5rem;
+.landing-footer nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 5px;
+  font-size: 12px;
+}
+
+.social-media a {
+  color: white;
+  text-decoration: none;
+  margin: 0 5px;
+  font-size: 12px;
 }

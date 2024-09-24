@@ -35,7 +35,7 @@ const ScheduleDeliverySummary = () => {
                     Authorization: `Bearer ${token}`
                 }
             };
-    
+
             // Send the request to create an order
             const response = await axios.post('http://localhost:5000/api/delivery/checkout', {
                 paymentReference,
@@ -46,12 +46,23 @@ const ScheduleDeliverySummary = () => {
                 deliveryState,
                 deliveryCountry
             }, config);
-    
+
             if (response.data.success) {
-                const { parentOrderNumber } = response.data;  // Extract parentOrderNumber
+                const { parentOrderNumber, totalAmount, items } = response.data;  // Extract complete order details
                 console.log(`Order created with Parent Order Number: ${parentOrderNumber}`);
                 setOrderCreated(true);
                 alert(`Order summary sent to your email. Parent Order Number: ${parentOrderNumber}`);
+                
+                // Navigate to the Order Confirmation page with complete order details
+                navigate('/order-confirmation', {
+                    state: {
+                        orderDetails: {
+                            id: parentOrderNumber,
+                            totalAmount,
+                            items
+                        }
+                    }
+                });
             } else {
                 setError('Failed to create the order. Please try again.');
             }
@@ -62,7 +73,7 @@ const ScheduleDeliverySummary = () => {
             setLoading(false);
         }
     };
-    
+
     return (
         <div className="schedule-delivery-summary-container">
             <img src={logo} alt="Company Logo" className="logo" />

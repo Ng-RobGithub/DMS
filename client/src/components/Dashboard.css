@@ -1,195 +1,155 @@
-/* Dashboard.css */
-
-/* General Styles */
-.dashboard-container {
-  padding: 20px;
+/* General styling */
+body {
+  margin: 0;
   font-family: Arial, sans-serif;
-  position: relative; /* Ensure the logo container can be positioned absolutely */
 }
 
-/* Logo Container */
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Logo */
 .logo-container {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .logo {
-  width: 100px; /* Adjust size as needed */
-  height: auto;
+  max-width: 150px;
 }
 
-/* Welcome Section */
+/* Welcome section */
+.welcome-section {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
 .welcome-section h1 {
-  font-size: 24px;
-  margin-bottom: 10px;
+  font-size: 2.5rem;
+  color: #333;
 }
 
 .welcome-section p {
-  font-size: 18px;
+  font-size: 1.2rem;
+  color: #666;
 }
 
-/* Wallet Balance Banner */
+/* Wallet banner */
 .wallet-banner {
   display: flex;
   justify-content: space-between;
-  background-color: #f5f5f5;
-  padding: 15px;
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f8f9fa;
   border-radius: 8px;
-  margin-bottom: 20px;
 }
 
 .banner-item {
-  text-align: center;
   flex: 1;
+  text-align: center;
 }
 
 .banner-item h2 {
-  font-size: 18px;
-  margin-bottom: 5px;
+  font-size: 1.5rem;
+  color: #333;
 }
 
 .banner-item p {
-  font-size: 24px;
+  font-size: 1.5rem;
+  color: #28a745;
   font-weight: bold;
-  color: #4caf50;
 }
 
-/* Order Status Buttons */
+/* Order status buttons */
 .order-status-buttons {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .order-btn {
   flex: 1;
-  text-align: center;
-  padding: 15px;
-  background-color: #2196f3;
-  color: white;
-  text-decoration: none;
-  border-radius: 8px;
-  font-size: 16px;
   margin: 0 10px;
+  padding: 15px;
+  background-color: #007bff;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  font-size: 1.2rem;
+  border-radius: 5px;
   position: relative;
 }
 
+.order-btn:hover {
+  background-color: #0056b3;
+}
+
 .order-btn .badge {
-  background-color: #ff5722;
-  border-radius: 12px;
+  background-color: #ffc107;
+  color: #000;
   padding: 5px 10px;
-  color: white;
-  font-size: 14px;
+  border-radius: 50%;
+  font-size: 1rem;
   position: absolute;
   top: 10px;
   right: 10px;
 }
 
-.order-btn:hover {
-  background-color: #1976d2;
-}
-
-/* Distributor Performance Chart */
+/* Performance chart section */
 .performance-chart {
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .performance-chart h2 {
-  font-size: 20px;
-  margin-bottom: 15px;
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-/* Order Summary */
+/* Order summary */
 .order-summary {
+  margin-bottom: 40px;
+}
+
+.order-summary h2 {
+  font-size: 1.8rem;
   margin-bottom: 20px;
 }
 
 .order-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
 }
 
 .order-table th, .order-table td {
-  padding: 10px;
+  padding: 10px 15px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border: 1px solid #ddd;
 }
 
 .order-table th {
-  background-color: #f2f2f2;
+  background-color: #f1f1f1;
 }
 
-.order-table td {
-  background-color: #fafafa;
+.order-table tr:nth-child(even) {
+  background-color: #f9f9f9;
 }
 
-/* Notifications */
-.notifications-section {
-  margin-bottom: 20px;
+/* Support and FAQ links */
+.support-faq {
+  text-align: center;
+  margin-top: 20px;
 }
 
-.notifications-list {
-  list-style: none;
-  padding: 0;
-}
-
-.notifications-list li {
-  background-color: #e3f2fd;
-  padding: 10px;
-  margin-bottom: 5px;
-  border-radius: 4px;
-}
-
-/* Activity Feed */
-.activity-feed {
-  margin-bottom: 20px;
-}
-
-.activity-list {
-  list-style: none;
-  padding: 0;
-}
-
-.activity-list li {
-  background-color: #e8f5e9;
-  padding: 10px;
-  margin-bottom: 5px;
-  border-radius: 4px;
-}
-
-/* Support Section */
-.support-section {
-  margin-bottom: 20px;
-}
-
-.support-links a {
-  display: block;
-  background-color: #2196f3;
-  color: white;
+.support-faq a {
+  margin: 0 15px;
+  font-size: 1.2rem;
+  color: #007bff;
   text-decoration: none;
-  padding: 10px;
-  border-radius: 4px;
-  text-align: center;
-  margin-bottom: 10px;
 }
 
-.support-links a:hover {
-  background-color: #1976d2;
-}
-
-/* Loading Spinner */
-.spinner {
-  font-size: 24px;
-  text-align: center;
-  margin: 20px;
-}
-
-/* Error Message */
-.error-message {
-  color: red;
-  font-size: 18px;
-  text-align: center;
-  margin: 20px;
+.support-faq a:hover {
+  text-decoration: underline;
 }

@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './LandingPage.css';
-import logo from '../assets/NgRob.png'; // Update the path to your logo file
-
+import logo from '../assets/NgRob.png'; // Correct path for your logo
+import blocmaster from '../assets/blocmaster2.png'; // Ensure the image exists
+import dan3XN from '../assets/3X-42.5N1.png';
+import dan3XR from '../assets/3X-42.5R1.png';
+import Falcon from '../assets/FALCON1.png';
 const LandingPage = () => {
   return (
     <div className="landing-page">
@@ -12,7 +15,7 @@ const LandingPage = () => {
           <img src={logo} alt="App Logo" className="logo-image" />
         </div>
         <nav>
-          <Link to="/dashboard">About Us</Link>
+          <Link to="/about">About Us</Link>
           <Link to="/features">Features</Link>
           <Link to="/contact">Contact</Link>
           <Link to="/login" className="login-button">Login</Link>
@@ -30,19 +33,28 @@ const LandingPage = () => {
       </section>
 
       {/* Features Section */}
-      <section className="BlocMaster">
+      <section className="features">
         <h2>Features</h2>
         <div className="feature-item">
-          <img src="/images/NgRob1.png" alt="BlocMaster_42.5R"/>
-          <h3>Feature 1</h3>
-          <p>Description of feature 1.</p>
+          <img src={blocmaster} alt="BlocMaster 42.5R" className=""/>
+          <h3>BlocMaster 42.5R</h3>
+          <p>For Blocks and concrete</p>
         </div>
         <div className="feature-item">
-          <img src="/images/feature2.png" alt="Feature 2"/>
-          <h3>Feature 2</h3>
-          <p>Description of feature 2.</p>
+        <img src={dan3XN} alt="3X-42.5N" className="3X-42.5N"/>
+          <h3>3X-42.5N</h3>
+          <p>Normal setting for multipurpose application</p>
         </div>
-        {/* Add more features as needed */}
+        <div className="feature-item">
+          <img src={dan3XR} alt="3X-42.5R" className="3X-42.5R"/>
+          <h3>3X-42.5R</h3>
+          <p>Rapid setting for multipurpose application</p>
+        </div>
+        <div className="feature-item">
+          <img src={Falcon} alt="Falcon" className="FALCON"/>
+          <h3>FALCON</h3>
+          <p>Lower garde Rapid setting for multipurpose application</p>
+        </div>
       </section>
 
       {/* Benefits Section */}
@@ -50,17 +62,17 @@ const LandingPage = () => {
         <h2>Why Choose Us?</h2>
         <p>Learn about the benefits of our application.</p>
         <div className="testimonial">
-          <p>"This application has transformed our workflow!" - User</p>
+          <p>"This application has transformed our workflow!" - Satisfied User</p>
         </div>
       </section>
 
-      {/* How It Works */}
+      {/* How It Works Section */}
       <section className="how-it-works">
         <h2>How It Works</h2>
         <ol>
-          <li>Step 1: Description of step 1.</li>
-          <li>Step 2: Description of step 2.</li>
-          <li>Step 3: Description of step 3.</li>
+          <li>Step 1: Register your account and set up your profile.</li>
+          <li>Step 2: Manage orders and track distributions easily.</li>
+          <li>Step 3: Generate reports and stay on top of your performance.</li>
         </ol>
       </section>
 
@@ -73,9 +85,8 @@ const LandingPage = () => {
         <div className="contact-info">
           <p>Contact us at: contact@example.com</p>
           <div className="social-media">
-            <a href="https://twitter.com/yourprofile">Twitter</a>
-            <a href="https://facebook.com/yourprofile">Facebook</a>
-            {/* Add more social media links */}
+            <a href="https://twitter.com/yourprofile" target="_blank" rel="noopener noreferrer">Twitter</a>
+            <a href="https://facebook.com/yourprofile" target="_blank" rel="noopener noreferrer">Facebook</a>
           </div>
         </div>
       </footer>

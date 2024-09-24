@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react'; 
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import './App.css';
 import Menus from './components/Menus';
@@ -27,8 +27,9 @@ const PrivacyPolicy = lazy(() => import('./components/PrivacyPolicy'));
 const Profile = lazy(() => import('./components/Profile'));
 const Users = lazy(() => import('./components/Users'));
 const RequestPasswordReset = lazy(() => import('./components/RequestPasswordReset'));
-const Login = lazy(() => import('./components/Login')); // Fixed import
-const Payment = lazy(() => import('./components/Payment')); // Updated import
+const Login = lazy(() => import('./components/Login'));
+const Payment = lazy(() => import('./components/Payment'));
+const OrderConfirmation = lazy(() => import('./components/OrderConfirmation')); // New import
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -87,6 +88,7 @@ const App = () => {
               <Route path="/profile" element={<PrivateRoute element={<Profile updateUserProfile={updateUserProfile} />} isAuthenticated={isAuthenticated} />} />
               <Route path="/users" element={<PrivateRoute element={<Users />} isAuthenticated={isAuthenticated} />} />
               <Route path="/payment" element={<PrivateRoute element={<Payment />} isAuthenticated={isAuthenticated} />} /> {/* Updated Payment route */}
+              <Route path="/order-confirmation" element={<PrivateRoute element={<OrderConfirmation />} isAuthenticated={isAuthenticated} />} /> {/* New route */}
               
               {/* Catch-all route */}
               <Route path="*" element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} />} />

@@ -18,7 +18,7 @@
   .profile-page input[type="text"] {
     padding: 10px;
     margin-bottom: 20px;
-    border: 1px solid #ddd;
+    border: 1px solid #0c0101;
     border-radius: 4px;
   }
   
@@ -30,4 +30,3 @@
     max-width: 200px;
     margin-top: 10px;
   }
-  

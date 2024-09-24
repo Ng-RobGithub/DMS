@@ -14,14 +14,30 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(null); // Clear previous errors
+
     try {
       const response = await api.post('/auth/login', { email, password });
-      console.log('Login successful:', response.data);
-      localStorage.setItem('token', response.data.token);
-      navigate('/dashboard');
+
+      const token = response.data.token;
+      if (token) {
+        console.log('Login successful:', token);
+
+        // Store the token in localStorage
+        localStorage.setItem('token', token);
+
+        // Debug log to ensure this part is reached
+        console.log('Navigating to dashboard...');
+
+        // Navigate to the dashboard
+        navigate('/dashboard');
+      } else {
+        throw new Error('Token not provided by the server');
+      }
+
     } catch (err) {
       console.error('Login error:', err.response?.data || err.message);
-      setError(err.response?.data?.message || 'Login failed');
+      setError(err.response?.data?.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -59,6 +75,7 @@ const Login = () => {
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </div>
+        {/* Display error if login fails */}
         {error && <div className="error">{error}</div>}
 
         <div className="additional-links">

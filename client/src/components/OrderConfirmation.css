@@ -1,0 +1,54 @@
+/* OrderConfirmation.css */
+
+.order-confirmation-container {
+    max-width: 600px; /* Set a maximum width for the container */
+    margin: 20px auto; /* Center the container */
+    padding: 20px; /* Add padding */
+    border: 1px solid #ccc; /* Add a border */
+    border-radius: 8px; /* Round the corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    background-color: #f9f9f9; /* Light background color */
+}
+
+h1 {
+    font-size: 24px; /* Larger font size for the title */
+    margin-bottom: 10px; /* Space below the title */
+}
+
+h2 {
+    font-size: 20px; /* Slightly larger font for subtitles */
+    margin: 15px 0 5px; /* Space above and below subtitles */
+}
+
+p {
+    font-size: 16px; /* Set a readable font size */
+    margin: 5px 0; /* Space above and below paragraphs */
+}
+
+ul {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0; /* Remove padding */
+}
+
+li {
+    padding: 8px; /* Padding for list items */
+    border: 1px solid #e0e0e0; /* Add border for items */
+    border-radius: 4px; /* Round corners of list items */
+    margin-bottom: 5px; /* Space between items */
+    background-color: #fff; /* White background for items */
+}
+
+button {
+    padding: 10px 15px; /* Add padding to buttons */
+    margin-top: 15px; /* Space above buttons */
+    border: none; /* Remove default border */
+    border-radius: 4px; /* Round corners */
+    background-color: #007bff; /* Primary color for buttons */
+    color: white; /* White text color */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px; /* Font size for buttons */
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}

@@ -42,6 +42,7 @@ const Menus = ({ user }) => {
               <li><Link to="/cart">Cart</Link></li>
               <li><Link to="/reports">Reports</Link></li>
               <li><Link to="/payment">Payment</Link></li> {/* Added Payment Link */}
+              <li><Link to="/promotion">promotion</Link></li>
               <li><Link to="/support">Support</Link></li>
               <li><Link to="/faq">FAQ</Link></li>
               <li><Link to="/logout">Logout</Link></li>

@@ -18,7 +18,9 @@ const LandingPage = () => {
           <Link to="/about">About Us</Link>
           <Link to="/features">Features</Link>
           <Link to="/contact">Contact</Link>
-          <Link to="/login" className="login-button">Login</Link>
+          <Link to="/login" className="login-button">
+            Login
+          </Link>
         </nav>
       </header>
 
@@ -27,8 +29,12 @@ const LandingPage = () => {
         <h1>Welcome to Our Application</h1>
         <p>Your solution for managing orders and distributors efficiently.</p>
         <div className="cta-buttons">
-          <Link to="/signup" className="cta-button">Get Started</Link>
-          <Link to="/learn-more" className="cta-button">Learn More</Link>
+          <Link to="/signup" className="cta-button">
+            Get Started
+          </Link>
+          <Link to="/learn-more" className="cta-button">
+            Learn More
+          </Link>
         </div>
       </section>
 
@@ -36,22 +42,22 @@ const LandingPage = () => {
       <section className="features">
         <h2>Features</h2>
         <div className="feature-item">
-          <img src={blocmaster} alt="BlocMaster 42.5R" className=""/>
+          <img src={blocmaster} alt="BlocMaster 42.5R" className="" />
           <h3>BlocMaster 42.5R</h3>
           <p>For Blocks and concrete</p>
         </div>
         <div className="feature-item">
-        <img src={dan3XN} alt="3X-42.5N" className="3X-42.5N"/>
+          <img src={dan3XN} alt="3X-42.5N" className="3X-42.5N" />
           <h3>3X-42.5N</h3>
           <p>Normal setting for multipurpose application</p>
         </div>
         <div className="feature-item">
-          <img src={dan3XR} alt="3X-42.5R" className="3X-42.5R"/>
+          <img src={dan3XR} alt="3X-42.5R" className="3X-42.5R" />
           <h3>3X-42.5R</h3>
           <p>Rapid setting for multipurpose application</p>
         </div>
         <div className="feature-item">
-          <img src={Falcon} alt="Falcon" className="FALCON"/>
+          <img src={Falcon} alt="Falcon" className="FALCON" />
           <h3>FALCON</h3>
           <p>Lower garde Rapid setting for multipurpose application</p>
         </div>
@@ -62,7 +68,9 @@ const LandingPage = () => {
         <h2>Why Choose Us?</h2>
         <p>Learn about the benefits of our application.</p>
         <div className="testimonial">
-          <p>"This application has transformed our workflow!" - Satisfied User</p>
+          <p>
+            "This application has transformed our workflow!" - Satisfied User
+          </p>
         </div>
       </section>
 
@@ -83,10 +91,22 @@ const LandingPage = () => {
           <Link to="/terms-of-service">Terms of Service</Link>
         </nav>
         <div className="contact-info">
-          <p>Contact us at: contact@example.com</p>
+          <p>Contact us at: ngrob4real@gmail.com</p>
           <div className="social-media">
-            <a href="https://twitter.com/yourprofile" target="_blank" rel="noopener noreferrer">Twitter</a>
-            <a href="https://facebook.com/yourprofile" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a
+              href="https://twitter.com/yourprofile"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Twitter
+            </a>
+            <a
+              href="https://facebook.com/yourprofile"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Facebook
+            </a>
           </div>
         </div>
       </footer>

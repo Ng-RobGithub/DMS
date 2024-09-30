@@ -8,8 +8,13 @@ const cors = require('cors'); // CORS for cross-origin handling
 const path = require('path'); // Path for serving React build
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const authRoutes = require('./routes/authRoutes');
+delete require.cache[require.resolve('dotenv')];
 
-// Import delivery routes
+require('dotenv').config();
+const dbURL =
+  process.env.MONGO_URI ||
+  `mongodb://${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || 27017}/${process.env.DB_DATABASE || 'files_manager'}`;
+
 const deliveryRoutes = require('./routes/deliveryRoutes');
 
 // Payment Route Imports
@@ -20,55 +25,59 @@ const quicktellerPaymentRoute = require('./routes/quicktellerPaymentRoute');
 
 // Logger setup
 const logger = winston.createLogger({
-    level: 'info',
-    format: winston.format.combine(
-        winston.format.timestamp(),
-        winston.format.json()
-    ),
-    transports: [
-        new winston.transports.Console(),
-        new winston.transports.File({ filename: 'combined.log' }),
-    ],
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json(),
+  ),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'combined.log' }),
+  ],
 });
 
 // Debugging environment variables (only in development mode)
 if (process.env.NODE_ENV === 'development') {
-    console.log('Environment Variables:');
-    ['MONGO_URI', 'JWT_SECRET', 'PORT', 'FRONTEND_URL', 'SESSION_SECRET'].forEach((envVar) => {
-        console.log(`${envVar}:`, process.env[envVar]);
-    });
+  console.log('Environment Variables:');
+  ['MONGO_URI', 'JWT_SECRET', 'PORT', 'FRONTEND_URL', 'SESSION_SECRET'].forEach(
+    (envVar) => {
+      console.log(`${envVar}:`, process.env[envVar]);
+    },
+  );
 }
 
 // Verify required environment variables
 const requiredEnvVars = ['JWT_SECRET', 'PORT', 'FRONTEND_URL', 'MONGO_URI'];
 requiredEnvVars.forEach((envVar) => {
-    if (!process.env[envVar]) {
-        logger.error(`${envVar} is not defined in the environment variables.`);
-        process.exit(1);
-    }
+  if (!process.env[envVar]) {
+    logger.error(`${envVar} is not defined in the environment variables.`);
+    process.exit(1);
+  }
 });
 
 // Database connection
 (async () => {
-    try {
-        await connectDB(); // Ensure this function uses process.env.MONGO_URI
-        logger.info('Database connected successfully');
-    } catch (err) {
-        logger.error('Database connection error:', err.message);
-        process.exit(1);
-    }
+  try {
+    await connectDB(); // Ensure this function uses process.env.MONGO_URI
+    logger.info('Database connected successfully');
+  } catch (err) {
+    logger.error('Database connection error:', err.message);
+    process.exit(1);
+  }
 })();
 
 const app = express(); // Initialize Express app
 
 // Use CORS middleware with more specific options
-app.use(cors({
+app.use(
+  cors({
     origin: process.env.FRONTEND_URL || 'http://localhost:3000', // Your frontend URL
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Allow headers including Authorization
     credentials: true, // Allow credentials (cookies, headers, etc.)
-    optionsSuccessStatus: 200 // For legacy browser support
-}));
+    optionsSuccessStatus: 200, // For legacy browser support
+  }),
+);
 
 // Init Middleware
 app.use(express.json()); // Parse JSON bodies
@@ -102,7 +111,7 @@ app.use(errorHandler);
 
 // Catchall handler for React routes (move this to the end)
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
 module.exports = app; // Export the app instance

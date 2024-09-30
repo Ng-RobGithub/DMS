@@ -1,5 +1,7 @@
 {
-    "singleQuote": true,
-    "trailingComma": "all"
-  }
-  
+  "singleQuote": true,
+  "trailingComma": "all",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "printWidth": 80
+}

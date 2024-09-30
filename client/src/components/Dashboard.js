@@ -159,6 +159,20 @@ const Dashboard = () => {
           </tbody> */}
         </table>
       </section>
+      {/* Notifications */}
+      <section className="notifications-section">
+        <h2>Notifications</h2>
+        <ul className="notifications-list">
+          <li>New product launch - Product X now available!</li>
+          <li>System maintenance - scheduled for 08/25/2024.</li>
+          <li>System Upgrade - Please be adviced that due to </li>
+          <li>system upgrade dms may experience reduced functionality </li>
+          <li>from 10 pm to 6 am on Teusday October 1st, 2024. </li>
+          
+          <li>We appologize for any inconvenience</li>
+          <li>New features - added to the DMS platform.</li>
+        </ul>
+      </section>
 
       {/* Support and FAQs */}
       <section className="support-faq">

@@ -1,0 +1,58 @@
+.support-page {
+    padding: 2rem;
+    background: #f9f9f9;
+  }
+  
+  .support-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .support-header h1 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .support-header p {
+    color: #666;
+  }
+  
+  .support-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .support-tabs button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+  }
+  
+  .support-tabs button.active {
+    background: #0056b3;
+  }
+  
+  .support-tabs button:hover {
+    background: #0056b3;
+  }
+  
+  .support-content {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .tab-content h2 {
+    margin-bottom: 1rem;
+  }
+  
+  .tab-content p {
+    color: #333;
+  }
+  

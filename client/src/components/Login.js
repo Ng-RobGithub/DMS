@@ -17,7 +17,13 @@ const Login = () => {
     setError(null); // Clear previous errors
 
     try {
-      const response = await api.post('/auth/login', { email, password });
+      // Normalize email before sending (trim whitespace and convert to lowercase)
+      const normalizedEmail = email.trim().toLowerCase();
+      const trimmedPassword = password.trim();
+
+      console.log('Sending request with email:', normalizedEmail);
+
+      const response = await api.post('/auth/login', { email: normalizedEmail, password: trimmedPassword });
 
       const token = response.data.token;
       if (token) {

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './LandingPage.css';
-import logo from '../assets/NgRob.png'; // Correct path for your logo
-import blocmaster from '../assets/blocmaster2.png'; // Ensure the image exists
-import dan3XN from '../assets/3X-42.5N1.png';
-import dan3XR from '../assets/3X-42.5R1.png';
-import Falcon from '../assets/FALCON1.png';
+import logo from '../assets/NgRob1.png'; // Correct path for your logo
+import blocmaster from '../assets/blocmaster.png'; // Ensure the image exists
+import dan3XN from '../assets/3X-42.5N.png';
+import dan3XR from '../assets/3X-42.5R.png';
+import Falcon from '../assets/FALCON.png';
 const LandingPage = () => {
   return (
     <div className="landing-page">
@@ -59,7 +59,7 @@ const LandingPage = () => {
         <div className="feature-item">
           <img src={Falcon} alt="Falcon" className="FALCON" />
           <h3>FALCON</h3>
-          <p>Lower garde Rapid setting for multipurpose application</p>
+          <p>Lower grade Rapid setting for multipurpose application</p>
         </div>
       </section>
 

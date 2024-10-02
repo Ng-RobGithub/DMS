@@ -1,173 +1,205 @@
-/* LandingPage.css */
-
 /* General Styles */
-body {
+body,
+html {
   margin: 0;
-  font-family: 'Arial', sans-serif;
-  background-color: #f8f9fa;
+  padding: 0;
+  font-family: Arial, sans-serif;
 }
 
 .landing-page {
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  min-height: 100vh;
+  background-color: #f8f9fa;
 }
 
+/* Header */
 .landing-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  background-color: #343a40;
-  color: white;
-}
-
-.landing-header nav a {
-  margin: 0 10px;
-  color: white;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.login-button {
-  padding: 8px 15px;
-  background-color: #17a2b8;
-  border-radius: 4px;
-  font-size: 14px;
+  padding: 20px;
+  background-color: #333;
   color: white;
 }
 
 .logo-image {
-  height: 40px;
+  height: 50px;
+  margin-left: 15px; /* Ensures logo is aligned with padding */
+}
+
+.landing-header nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+}
+
+.login-button {
+  background-color: #007bff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: white;
+}
+
+.login-button:hover {
+  background-color: #0056b3;
 }
 
 /* Hero Section */
 .hero {
   text-align: center;
-  padding: 40px 10px;
-  background-color: #007bff;
-  color: white;
+  padding: 100px 20px; /* Increased padding for better spacing */
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url('../assets/Obajana-factory.png') no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed;
+  color: #ffffff; /* Set text color to bright white */
 }
 
 .hero h1 {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
+  font-size: 56px;
+  margin-bottom: 20px;
+  color: #ffffff; /* Ensure h1 text is bright white */
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* Optional shadow for clear visibility */
 }
 
 .hero p {
-  font-size: 1.1rem;
-  margin-bottom: 20px;
+  font-size: 24px;
+  margin-bottom: 30px;
+  color: #ffffff; /* Ensure p text is bright white */
+  text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.6); /* Optional shadow for clear visibility */
 }
 
 .cta-buttons {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  flex-direction: column;
+  gap: 20px;
 }
 
 .cta-button {
-  padding: 12px;
+  padding: 15px 30px;
   background-color: #28a745;
   color: white;
-  text-align: center;
-  border-radius: 4px;
-  font-size: 16px;
-  margin-bottom: 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #218838;
 }
 
 /* Features Section */
 .features {
+  padding: 40px;
   text-align: center;
-  padding: 20px 10px;
+  background-color: #f1f1f1;
 }
 
 .features h2 {
-  font-size: 1.5rem;
+  font-size: 36px;
   margin-bottom: 20px;
 }
 
 .feature-item {
-  margin: 10px 0;
+  display: inline-block;
+  width: 22%;
+  margin: 15px;
+  text-align: center;
 }
 
 .feature-item img {
-  height: 100px;
-  margin-bottom: 10px;
+  width: 120px; /* Adjust the size for better visibility */
+  height: auto;
+  margin-bottom: 15px;
 }
 
 .feature-item h3 {
-  font-size: 1.2rem;
-  margin-bottom: 5px;
+  font-size: 24px;
+  margin: 10px 0;
 }
 
 .feature-item p {
-  font-size: 0.9rem;
-  color: #6c757d;
+  font-size: 16px;
 }
 
 /* Benefits Section */
 .benefits {
+  padding: 40px;
   text-align: center;
-  padding: 20px 10px;
+  background-color: #fff;
 }
 
 .benefits h2 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
+  font-size: 36px;
+  margin-bottom: 20px;
 }
 
 .benefits p {
-  font-size: 1rem;
+  font-size: 20px;
 }
 
 .testimonial {
+  margin: 20px auto;
+  padding: 20px;
+  border-left: 5px solid #007bff;
   font-style: italic;
-  background-color: #e9ecef;
-  padding: 10px;
-  border-radius: 8px;
-  margin: 10px auto;
-  font-size: 0.9rem;
 }
 
 /* How It Works Section */
 .how-it-works {
+  padding: 40px;
+  background-color: #e9ecef;
   text-align: center;
-  padding: 20px 10px;
 }
 
 .how-it-works h2 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
+  font-size: 36px;
+  margin-bottom: 20px;
 }
 
 .how-it-works ol {
-  font-size: 1rem;
   margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  text-align: left;
 }
 
 .how-it-works li {
-  margin-bottom: 8px;
+  margin-bottom: 15px;
+  font-size: 18px;
 }
 
 /* Footer */
 .landing-footer {
-  background-color: #343a40;
+  background-color: #333;
   color: white;
-  padding: 10px;
+  padding: 20px;
   text-align: center;
 }
 
 .landing-footer nav a {
   color: white;
   text-decoration: none;
-  margin: 0 5px;
-  font-size: 12px;
+  margin: 0 10px;
+}
+
+.landing-footer nav a:hover {
+  text-decoration: underline;
+}
+
+.contact-info {
+  margin-top: 15px;
 }
 
 .social-media a {
   color: white;
+  margin: 0 10px;
   text-decoration: none;
-  margin: 0 5px;
-  font-size: 12px;
+}
+
+.social-media a:hover {
+  color: #007bff;
 }

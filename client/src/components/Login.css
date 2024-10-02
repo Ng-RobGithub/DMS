@@ -1,130 +1,105 @@
-/* Styling for the logo */
-.logo-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
+/* General Styles */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
 }
 
-.company-logo {
-  width: 150px; /* Adjust size as needed */
-  height: auto;
-}
-
-/* General styling for the login container */
+/* Login Page Container */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #f4f4f4;
+  min-height: 100vh;
+  position: relative;
+  background: url('../assets/Obajana-factory.png') no-repeat center center;
+  background-size: cover;
+  color: white;
 }
 
-/* Styling for the form itself */
+/* Header Container */
+.header {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+/* Logo Styles */
+.logo-container {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.company-logo {
+  height: 60px;
+}
+
+/* Login Form Styles */
 .login-form {
-  width: 100%;
-  max-width: 400px;
-  padding: 20px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.6); /* Translucent background */
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  width: 300px;
+  text-align: center;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
-/* Input fields styling */
-input[type="email"],
-input[type="password"] {
+input[type='email'],
+input[type='password'] {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-  transition: border-color 0.2s ease;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
 }
 
-input[type="email"]:focus,
-input[type="password"]:focus {
+input[type='email']:focus,
+input[type='password']:focus {
   border-color: #007bff;
-  outline: none;
 }
 
-/* Button styling */
+/* Submit Button */
 .btn-primary {
   width: 100%;
-  padding: 12px;
+  padding: 10px;
   background-color: #007bff;
   border: none;
+  border-radius: 5px;
   color: white;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .btn-primary:hover {
   background-color: #0056b3;
 }
 
-.btn-primary:disabled {
-  background-color: #aaa;
-  cursor: not-allowed;
-}
-
-/* Error message styling */
+/* Error Message */
 .error {
-  color: red;
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-
-/* Additional links */
-.additional-links {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.additional-links a {
-  font-size: 14px;
-  color: #007bff;
-  text-decoration: none;
-}
-
-.additional-links a:hover {
-  text-decoration: underline;
-}
-
-/* Register link */
-.register-link {
-  text-align: center;
+  color: #ff4d4f;
   margin-top: 20px;
 }
 
+/* Additional Links */
+.additional-links {
+  margin-top: 20px;
+}
+
+.additional-links a,
 .register-link a {
-  font-size: 14px;
-  color: #007bff;
+  color: white;
   text-decoration: none;
 }
 
+.additional-links a:hover,
 .register-link a:hover {
   text-decoration: underline;
 }
 
-/* Adjust for mobile */
-@media (max-width: 768px) {
-  .login-form {
-    padding: 15px;
-  }
-
-  input[type="email"],
-  input[type="password"] {
-    font-size: 14px;
-  }
-
-  .btn-primary {
-    font-size: 14px;
-  }
+/* Register Link */
+.register-link {
+  margin-top: 30px;
 }

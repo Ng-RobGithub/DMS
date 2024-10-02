@@ -23,7 +23,10 @@ const Login = () => {
 
       console.log('Sending request with email:', normalizedEmail);
 
-      const response = await api.post('/auth/login', { email: normalizedEmail, password: trimmedPassword });
+      const response = await api.post('/auth/login', {
+        email: normalizedEmail,
+        password: trimmedPassword,
+      });
 
       const token = response.data.token;
       if (token) {
@@ -40,10 +43,11 @@ const Login = () => {
       } else {
         throw new Error('Token not provided by the server');
       }
-
     } catch (err) {
       console.error('Login error:', err.response?.data || err.message);
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      setError(
+        err.response?.data?.message || 'Login failed. Please try again.',
+      );
     } finally {
       setLoading(false);
     }
@@ -51,11 +55,15 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <form onSubmit={handleSubmit} className="login-form">
-        {/* Add company logo */}
+      {/* Logo in the top-left corner */}
+      <div className="header">
         <div className="logo-container">
           <img src={logo} alt="Company Logo" className="company-logo" />
         </div>
+      </div>
+
+      {/* Centered login form */}
+      <form onSubmit={handleSubmit} className="login-form">
         <div className="form-group">
           <input
             type="email"
@@ -81,7 +89,6 @@ const Login = () => {
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </div>
-        {/* Display error if login fails */}
         {error && <div className="error">{error}</div>}
 
         <div className="additional-links">

@@ -38,7 +38,7 @@ const OrderConfirmation = () => {
       ) : (
         <p>No order details available.</p>
       )}
-      <button onClick={() => (window.location.href = '/cart')}>
+      <button onClick={() => (window.location.href = '/Cart')}>
         Go to Cart
       </button>
     </div>

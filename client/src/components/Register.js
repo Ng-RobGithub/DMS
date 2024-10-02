@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import './Register.css';
-import logo from '../assets/NgRob2.png';  // Import your logo image (adjust the path as necessary)
+import logo from '../assets/NgRob1.png'; // Import your logo image (adjust the path as necessary)
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -13,19 +13,39 @@ const Register = () => {
     company: '',
     customerId: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
   });
 
-  const { fullName, email, phoneNumber, country, company, customerId, password, confirmPassword } = formData;
+  const {
+    fullName,
+    email,
+    phoneNumber,
+    country,
+    company,
+    customerId,
+    password,
+    confirmPassword,
+  } = formData;
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [agreeToPolicy, setAgreeToPolicy] = useState(false);
   const navigate = useNavigate();
 
-  const africanCountries = ['Nigeria', 'Ghana', 'Kenya', 'South Africa', 'Uganda', 'Tanzania', 'Rwanda', 'Egypt', 'Morocco'];
+  const africanCountries = [
+    'Nigeria',
+    'Ghana',
+    'Kenya',
+    'South Africa',
+    'Uganda',
+    'Tanzania',
+    'Rwanda',
+    'Egypt',
+    'Morocco',
+  ];
 
-  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const onChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const formatPhoneNumber = (number) => {
     if (number.startsWith('+')) {
@@ -41,7 +61,7 @@ const Register = () => {
     return password.length >= 8; // Example rule: password must be at least 8 characters long
   };
 
-  const registerUser = async e => {
+  const registerUser = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
@@ -66,15 +86,18 @@ const Register = () => {
     try {
       const formattedPhoneNumber = formatPhoneNumber(phoneNumber);
 
-      const registerResponse = await axios.post(`http://localhost:5000/api/auth/register`, {
-        fullName,
-        email,
-        phoneNumber: formattedPhoneNumber,
-        country,
-        company,
-        customerId,
-        password
-      });
+      const registerResponse = await axios.post(
+        `http://localhost:5000/api/auth/register`,
+        {
+          fullName,
+          email,
+          phoneNumber: formattedPhoneNumber,
+          country,
+          company,
+          customerId,
+          password,
+        },
+      );
 
       if (registerResponse.status === 201) {
         setSuccessMessage('Registration successful. You can now log in.');
@@ -82,14 +105,24 @@ const Register = () => {
           navigate('/login');
         }, 3000);
       } else {
-        setErrorMessage('Registration failed. Please check your details and try again.');
+        setErrorMessage(
+          'Registration failed. Please check your details and try again.',
+        );
       }
     } catch (error) {
-      console.error('Registration error:', error.response ? error.response.data : error.message);
+      console.error(
+        'Registration error:',
+        error.response ? error.response.data : error.message,
+      );
       if (error.response) {
-        setErrorMessage(error.response.data.message || 'Registration failed. Please check your details and try again.');
+        setErrorMessage(
+          error.response.data.message ||
+            'Registration failed. Please check your details and try again.',
+        );
       } else {
-        setErrorMessage('Registration failed. Please check your details and try again.');
+        setErrorMessage(
+          'Registration failed. Please check your details and try again.',
+        );
       }
     } finally {
       setLoading(false);
@@ -141,7 +174,9 @@ const Register = () => {
             <select name="country" value={country} onChange={onChange} required>
               <option value="">Select Country</option>
               {africanCountries.map((country, index) => (
-                <option key={index} value={country}>{country}</option>
+                <option key={index} value={country}>
+                  {country}
+                </option>
               ))}
             </select>
           </div>

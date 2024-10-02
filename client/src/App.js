@@ -1,5 +1,11 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from 'react-router-dom';
 import './App.css';
 import Menus from './components/Menus';
 import PrivateRoute from './components/PrivateRoute';
@@ -22,11 +28,15 @@ const ProductBrands = lazy(() => import('./components/ProductBrands'));
 const ProductDetails = lazy(() => import('./components/ProductDetails'));
 const OrderSummary = lazy(() => import('./components/OrderSummary'));
 const ScheduleDelivery = lazy(() => import('./components/ScheduleDelivery'));
-const ScheduleDeliverySummary = lazy(() => import('./components/ScheduleDeliverySummary'));
+const ScheduleDeliverySummary = lazy(
+  () => import('./components/ScheduleDeliverySummary'),
+);
 const PrivacyPolicy = lazy(() => import('./components/PrivacyPolicy'));
 const Profile = lazy(() => import('./components/Profile'));
 const Users = lazy(() => import('./components/Users'));
-const RequestPasswordReset = lazy(() => import('./components/RequestPasswordReset'));
+const RequestPasswordReset = lazy(
+  () => import('./components/RequestPasswordReset'),
+);
 const Login = lazy(() => import('./components/Login'));
 const Payment = lazy(() => import('./components/Payment'));
 const OrderConfirmation = lazy(() => import('./components/OrderConfirmation')); // New import
@@ -64,34 +74,201 @@ const App = () => {
               <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/request-password-reset" element={<RequestPasswordReset />} />
+              <Route
+                path="/request-password-reset"
+                element={<RequestPasswordReset />}
+              />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-
               {/* Private Routes */}
-              <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} isAuthenticated={isAuthenticated} />} />
-              <Route path="/orders" element={<PrivateRoute element={<Orders />} isAuthenticated={isAuthenticated} />} />
-              <Route path="/wallet-statement" element={<PrivateRoute element={<WalletStatement />} isAuthenticated={isAuthenticated} />} />
-              <Route path="/products" element={<PrivateRoute element={<Products />} isAuthenticated={isAuthenticated} />} />
-              <Route path="/cart" element={<PrivateRoute element={<Cart />} isAuthenticated={isAuthenticated} />} />
-              <Route path="/reports" element={<PrivateRoute element={<Reports />} isAuthenticated={isAuthenticated} />} />
-              <Route path="/support" element={<PrivateRoute element={<Support />} isAuthenticated={isAuthenticated} />} />
-              <Route path="/faq" element={<PrivateRoute element={<FAQ />} isAuthenticated={isAuthenticated} />} />
-              <Route path="/logout" element={<PrivateRoute element={<Logout />} isAuthenticated={isAuthenticated} />} />
-              
-              <Route path="/delivery-method" element={<PrivateRoute element={<DeliveryMethod />} isAuthenticated={isAuthenticated} />} />
-              <Route path="/delivery-details" element={<PrivateRoute element={<DeliveryDetails />} isAuthenticated={isAuthenticated} />} />
-              <Route path="/product-brands" element={<PrivateRoute element={<ProductBrands />} isAuthenticated={isAuthenticated} />} />
-              <Route path="/product-details" element={<PrivateRoute element={<ProductDetails />} isAuthenticated={isAuthenticated} />} />
-              <Route path="/order-summary" element={<PrivateRoute element={<OrderSummary />} isAuthenticated={isAuthenticated} />} />
-              <Route path="/schedule-delivery" element={<PrivateRoute element={<ScheduleDelivery />} isAuthenticated={isAuthenticated} />} />
-              <Route path="/schedule-delivery-summary" element={<PrivateRoute element={<ScheduleDeliverySummary />} isAuthenticated={isAuthenticated} />} />
-              <Route path="/profile" element={<PrivateRoute element={<Profile updateUserProfile={updateUserProfile} />} isAuthenticated={isAuthenticated} />} />
-              <Route path="/users" element={<PrivateRoute element={<Users />} isAuthenticated={isAuthenticated} />} />
-              <Route path="/payment" element={<PrivateRoute element={<Payment />} isAuthenticated={isAuthenticated} />} /> {/* Updated Payment route */}
-              <Route path="/order-confirmation" element={<PrivateRoute element={<OrderConfirmation />} isAuthenticated={isAuthenticated} />} /> {/* New route */}
-              
+              <Route
+                path="/dashboard"
+                element={
+                  <PrivateRoute
+                    element={<Dashboard />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                }
+              />
+              <Route
+                path="/orders"
+                element={
+                  <PrivateRoute
+                    element={<Orders />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                }
+              />
+              <Route
+                path="/wallet-statement"
+                element={
+                  <PrivateRoute
+                    element={<WalletStatement />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                }
+              />
+              <Route
+                path="/products"
+                element={
+                  <PrivateRoute
+                    element={<Products />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                }
+              />
+              <Route
+                path="/cart"
+                element={
+                  <PrivateRoute
+                    element={<Cart />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                }
+              />
+              <Route
+                path="/reports"
+                element={
+                  <PrivateRoute
+                    element={<Reports />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                }
+              />
+              <Route
+                path="/support"
+                element={
+                  <PrivateRoute
+                    element={<Support />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                }
+              />
+              <Route
+                path="/faq"
+                element={
+                  <PrivateRoute
+                    element={<FAQ />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                }
+              />
+              <Route
+                path="/logout"
+                element={
+                  <PrivateRoute
+                    element={<Logout />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                }
+              />
+              <Route
+                path="/delivery-method"
+                element={
+                  <PrivateRoute
+                    element={<DeliveryMethod />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                }
+              />
+              <Route
+                path="/delivery-details"
+                element={
+                  <PrivateRoute
+                    element={<DeliveryDetails />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                }
+              />
+              <Route
+                path="/product-brands"
+                element={
+                  <PrivateRoute
+                    element={<ProductBrands />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                }
+              />
+              <Route
+                path="/product-details"
+                element={
+                  <PrivateRoute
+                    element={<ProductDetails />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                }
+              />
+              <Route
+                path="/order-summary"
+                element={
+                  <PrivateRoute
+                    element={<OrderSummary />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                }
+              />
+              <Route
+                path="/schedule-delivery"
+                element={
+                  <PrivateRoute
+                    element={<ScheduleDelivery />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                }
+              />
+              <Route
+                path="/schedule-delivery-summary"
+                element={
+                  <PrivateRoute
+                    element={<ScheduleDeliverySummary />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <PrivateRoute
+                    element={<Profile updateUserProfile={updateUserProfile} />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                }
+              />
+              <Route
+                path="/users"
+                element={
+                  <PrivateRoute
+                    element={<Users />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                }
+              />
+              <Route
+                path="/payment"
+                element={
+                  <PrivateRoute
+                    element={<Payment />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                }
+              />{' '}
+              {/* Updated Payment route */}
+              <Route
+                path="/order-confirmation"
+                element={
+                  <PrivateRoute
+                    element={<OrderConfirmation />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                }
+              />{' '}
+              {/* New route */}
               {/* Catch-all route */}
-              <Route path="*" element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} />} />
+              <Route
+                path="*"
+                element={
+                  <Navigate to={isAuthenticated ? '/dashboard' : '/login'} />
+                }
+              />
             </Routes>
           </Suspense>
         </div>

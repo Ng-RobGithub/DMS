@@ -914,6 +914,7 @@ dir-glob@^3.0.1:
   resolved "file:"
   dependencies:
     "@paypal/checkout-server-sdk" "^1.0.3"
+    argon2 "^0.41.1"
     axios "^1.7.7"
     bcrypt "^5.1.1"
     bcryptjs "^2.4.3"

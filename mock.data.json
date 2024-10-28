@@ -1,0 +1,40 @@
+[
+  {
+    "user": "66cb83699bd7fe358c9871fa",
+    "parentOrderNumber": "ORD-1000007",
+    "paymentReference": "PAY-001234",
+    "paymentDate": "2023-09-15T08:30:00.000Z",
+    "deliveryDate": "2023-09-20T09:30:00.000Z",
+    "truckSize": "10 Tons",
+    "deliveryAddress": "123 Lagos Avenue, Lagos",
+    "deliveryState": "Lagos",
+    "deliveryCountry": "Nigeria",
+    "totalAmount": 250000,
+    "status": "Pending"
+  },
+  {
+    "fullName": "great",
+    "email": "grateful@gmail.com",
+    "phoneNumber": "081069306",
+    "country": "Nigeria",
+    "company": "Riverpod",
+    "customerId": "20canca",
+    "password": "simple"
+  },
+  {
+    "email": "grateful@gmail.com",
+    "password": "simple"
+  },
+
+  {
+    "email": "tom-willing@gmail.com",
+    "password": "password"
+  },
+
+  {
+    "name": "Product Name",
+    "price": 99.99,
+    "description": "This is a sample product description providing details about the product.",
+    "stock": 50
+  }
+]

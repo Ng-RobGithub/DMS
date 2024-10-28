@@ -8,73 +8,56 @@ import { WalletContext } from '../provider/walletProvider';
 
 const Cart = () => {
   const navigate = useNavigate();
-  const { availableBalance, setAvailableBalance } = useContext(WalletContext); // Use the context
+  const { availableBalance, setAvailableBalance } = useContext(WalletContext);
 
-  const [cart, setCart] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
 
+  // Fetch cart items on component mount
   useEffect(() => {
-    const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
-    setCart(savedCart);
-    const total = savedCart.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0,
-    );
-    setTotalAmount(total);
+    const fetchCartItems = async () => {
+      try {
+        const response = await api.get('/cart');
+        setCartItems(response.data);
+        const total = response.data.totalPrice;
+        setTotalAmount(total);
+      } catch (error) {
+        console.error('Error fetching cart items:', error);
+      }
+    };
+
+    fetchCartItems();
   }, []);
 
   const remainingBalance = availableBalance - totalAmount;
 
-  const handleDelete = (index) => {
-    const updatedCart = cart.filter((_, i) => i !== index);
-    setCart(updatedCart);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
-    const total = updatedCart.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0,
-    );
-    setTotalAmount(total);
+  // Handle item deletion
+  const handleDelete = async (itemId) => {
+    try {
+      await api.delete(`/cart/${itemId}`);
+      setCartItems((prevItems) => prevItems.filter((item) => item._id !== itemId));
+      const updatedTotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+      setTotalAmount(updatedTotal);
+    } catch (error) {
+      console.error('Error deleting item:', error);
+    }
   };
 
+  // Handle saving the cart and updating wallet balance
   const handleSave = async () => {
     if (remainingBalance < 0) {
       alert('Insufficient balance to complete the transaction.');
       return;
     }
 
-    const orderDetails = {
-      id: new Date().getTime(),
-      totalAmount,
-      items: cart.map((item) => ({
-        brand: item.brand,
-        quantity: item.quantity,
-        price: item.price * item.quantity,
-      })),
-    };
-
     try {
       await api.post('/wallet/update', { amount: -totalAmount });
-      setAvailableBalance((prevBalance) => prevBalance - totalAmount); // Update the context state
-      setCart([]);
-      setTotalAmount(0);
-      localStorage.removeItem('cart');
-      navigate('/order-confirmation', { state: { orderDetails } });
+      setAvailableBalance((prev) => prev - totalAmount);
+      navigate('/order-confirmation', { state: { totalAmount, cartItems } });
     } catch (error) {
       console.error('Error updating wallet balance:', error);
       alert('Failed to update wallet balance.');
     }
-  };
-
-  const handleScheduleDelivery = () => {
-    navigate('/schedule-delivery');
-  };
-
-  const handleCancel = () => {
-    navigate('/');
-  };
-
-  const handleBack = () => {
-    navigate(-1);
   };
 
   return (
@@ -85,25 +68,18 @@ const Cart = () => {
 
       <h1>Cart</h1>
       <p>Available Balance: NGN {availableBalance.toFixed(2)}</p>
-      <p>
-        Remaining Balance: NGN{' '}
-        {remainingBalance >= 0 ? remainingBalance.toFixed(2) : 0}
-      </p>
-      {cart.length > 0 ? (
+      <p>Remaining Balance: NGN {Math.max(remainingBalance, 0).toFixed(2)}</p>
+
+      {cartItems.length > 0 ? (
         <div className="cart-items">
           <h2>Cart Items</h2>
           <ul>
-            {cart.map((item, index) => (
-              <li key={index} className="cart-item">
-                <p className="item-detail">Product Brand: {item.brand}</p>
-                <p className="item-detail">Quantity Ordered: {item.quantity}</p>
-                <p className="item-detail">
-                  Total Amount: NGN {item.price * item.quantity}
-                </p>
-                <button
-                  onClick={() => handleDelete(index)}
-                  className="delete-button"
-                >
+            {cartItems.map((item) => (
+              <li key={item._id} className="cart-item">
+                <p className="item-detail">Product Brand: {item.product.brand}</p>
+                <p className="item-detail">Quantity: {item.quantity}</p>
+                <p className="item-detail">Price: NGN {item.price}</p>
+                <button onClick={() => handleDelete(item._id)} className="delete-button">
                   Delete
                 </button>
               </li>
@@ -119,11 +95,6 @@ const Cart = () => {
       ) : (
         <p className="empty-cart">Your cart is empty.</p>
       )}
-      <div className="cart-footer-buttons">
-        <button onClick={handleScheduleDelivery}>Schedule Delivery</button>
-        <button onClick={handleCancel}>Cancel</button>
-        <button onClick={handleBack}>{'<< Back'}</button>
-      </div>
     </div>
   );
 };

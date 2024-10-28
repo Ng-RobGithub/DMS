@@ -3,8 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { productDetails } from '../data/ProductMaps';
 import { FaShoppingCart } from 'react-icons/fa';
-import './ProductDetails.css'; // Import CSS for styling
-import logo from '../assets/NgRob.png'; // Import the company logo
+import './ProductDetails.css';
+import logo from '../assets/NgRob.png';
+import api from '../api';
 
 const ProductDetails = () => {
     const { state } = useLocation();
@@ -14,7 +15,7 @@ const ProductDetails = () => {
     const [quantity, setQuantity] = useState(300);
     const [product, setProduct] = useState(null);
     const [message, setMessage] = useState('');
-    const [isOrderAdded, setIsOrderAdded] = useState(false); // State to track if order was added
+    const [isOrderAdded, setIsOrderAdded] = useState(false);
 
     useEffect(() => {
         if (brand) {
@@ -31,15 +32,21 @@ const ProductDetails = () => {
         setQuantity(prevQuantity => Math.max(prevQuantity + amount, 300));
     };
 
-    const handleAddToCart = () => {
+    const handleAddToCart = async () => {
         try {
-            const cartItem = { brand, quantity, price: product.pricePerBag };
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cart.push(cartItem);
-            localStorage.setItem('cart', JSON.stringify(cart));
-            
-            setMessage('Order Successfully added to cart');
-            setIsOrderAdded(true);
+            const cartItem = {
+                productId: product.id, // Assuming each product has an id
+                quantity,
+                price: product.pricePerBag,
+            };
+
+            // Send cart item to backend
+            const response = await api.post('/cart', cartItem);
+
+            if (response.status === 200) {
+                setMessage('Order successfully added to cart');
+                setIsOrderAdded(true);
+            }
         } catch (error) {
             console.error('Error adding to cart:', error);
             setMessage('Order cannot be added to cart, kindly contact your sales officer');
@@ -57,11 +64,11 @@ const ProductDetails = () => {
     return (
         <div className="product-details-container">
             <div className="header">
-                <img src={logo} alt="Company Logo" className="company-logo" /> {/* Company logo */}
+                <img src={logo} alt="Company Logo" className="company-logo" />
                 <div className="cart-icon-container">
                     <FaShoppingCart 
                         className="cart-icon" 
-                        onClick={() => navigate('/cart')} // Navigate to cart on click
+                        onClick={() => navigate('/cart')}
                     />
                     {isOrderAdded && <div className="notification-dot" onClick={() => navigate('/cart')}></div>}
                 </div>

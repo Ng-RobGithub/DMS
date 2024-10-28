@@ -17,10 +17,15 @@ exports.addItemToCart = async (req, res) => {
   const { productId, quantity, price } = req.body;
   try {
     let cart = await Cart.findOne({ user: req.user.id });
+
     if (!cart) {
-      cart = new Cart({ user: req.user.id, items: [{ product: productId, quantity, price }], totalPrice: quantity * price });
+      cart = new Cart({
+        user: req.user.id,
+        items: [{ product: productId, quantity, price }],
+        totalPrice: quantity * price,
+      });
     } else {
-      const itemIndex = cart.items.findIndex(item => item.product.toString() === productId);
+      const itemIndex = cart.items.findIndex((item) => item.product.toString() === productId);
       if (itemIndex > -1) {
         cart.items[itemIndex].quantity += quantity;
         cart.items[itemIndex].price = price;
@@ -43,7 +48,7 @@ exports.updateCartItem = async (req, res) => {
     let cart = await Cart.findOne({ user: req.user.id });
     if (!cart) return res.status(404).json({ message: 'Cart not found' });
 
-    const itemIndex = cart.items.findIndex(item => item._id.toString() === req.params.id);
+    const itemIndex = cart.items.findIndex((item) => item._id.toString() === req.params.id);
     if (itemIndex > -1) {
       cart.items[itemIndex].quantity = quantity;
       await cart.save();
@@ -62,7 +67,7 @@ exports.removeItemFromCart = async (req, res) => {
     let cart = await Cart.findOne({ user: req.user.id });
     if (!cart) return res.status(404).json({ message: 'Cart not found' });
 
-    const itemIndex = cart.items.findIndex(item => item._id.toString() === req.params.id);
+    const itemIndex = cart.items.findIndex((item) => item._id.toString() === req.params.id);
     if (itemIndex > -1) {
       cart.totalPrice -= cart.items[itemIndex].quantity * cart.items[itemIndex].price;
       cart.items.splice(itemIndex, 1);

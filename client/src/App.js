@@ -80,15 +80,7 @@ const App = () => {
               />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               {/* Private Routes */}
-              <Route
-                path="/dashboard"
-                element={
-                  <PrivateRoute
-                    element={<Dashboard />}
-                    isAuthenticated={isAuthenticated}
-                  />
-                }
-              />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route
                 path="/orders"
                 element={

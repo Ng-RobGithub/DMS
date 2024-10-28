@@ -3,5 +3,5 @@
   "trailingComma": "all",
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "printWidth": 80
+  "printWidth": 100
 }

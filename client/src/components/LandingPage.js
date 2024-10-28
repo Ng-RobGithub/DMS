@@ -26,7 +26,7 @@ const LandingPage = () => {
 
       {/* Hero Section */}
       <section className="hero">
-        <h1>Welcome to Our Application</h1>
+        <h1>Welcome to DMS</h1>
         <p>Your solution for managing orders and distributors efficiently.</p>
         <div className="cta-buttons">
           <Link to="/signup" className="cta-button">

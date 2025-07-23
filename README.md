@@ -1,56 +1,84 @@
-# Distributor Management System -DMS
+# Distributor Management System (DMS)
 
-A comprehensive mobile application designed to manage distributor operations including daily visits by staff, order generation, order processing, and order fulfillment.
+A full-stack web application that streamlines distributor operations by automating order management, wallet payments, and performance analytics in real time.
 
-## Table of Contents
+## 🚀 Project Overview
 
-- [Project Description](#project-description)
-- [Features](#features)
-- [Technologies Used](#technologies-used)
-- [Installation](#installation)
-- [Usage](#usage)
-- [API Endpoints](#api-endpoints)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+Traditional distributor workflows involve manual processes that are time-consuming and error-prone. This system automates key operations — from order creation and delivery scheduling to payment processing and performance tracking — improving speed, accuracy, and transparency.
 
-## Project Description
+## 👤 Role
 
-The Distributor Management System is a mobile application that facilitates the management of distributor activities. It captures daily visits by staff, manages distributor order generation, processing, and fulfillment. The application features a dashboard displaying important metrics, a payment module, distributor profiles, order management, reports, wallet statements, product management, a cart for purchases, and support functionalities.
+**Ngozi Robertson Agomuonso**  
+Full-Stack Developer | Built the project end-to-end
 
-## Features
+## 🧩 Core Features
 
-1. **Dashboard**: Displays wallet balance (ledger and available balance), new orders, saved orders, and submitted orders.
-2. **Payment Platform**: Integrates a payment module for processing transactions.
-3. **Distributor Profile**: Displays distributor profile pictures and details on the dashboard.
-4. **Order Management**: Allows creating, viewing, and managing orders.
-5. **Reports**: Generates reports based on order data.
-6. **Wallet Statement**: Displays the ledger and available balances.
-7. **Products**: Manages product selection, delivery methods, and scheduling.
-8. **Cart**: Manages items for purchase and scheduling delivery.
-9. **Support and FAQ**: Provides user support and frequently asked questions.
-10. **Authentication**: Incorporates One-Time Password (OTP) at login and after scheduling delivery checkout.
+- **Authentication & OTP Checkout**  
+  Secure login with OTP verification for sensitive actions.
 
-## Technologies Used
+- **Order Management**  
+  Create, save, and track orders in real time.
 
-### Frontend
-- **Framework**: React Native
-- **State Management**: Redux
-- **Navigation**: React Navigation
+- **Wallet System**  
+  View total and available wallet balances, and process payments securely.
 
-### Backend
-- **Framework**: Node.js with Express.js
-- **Database**: MongoDB with Mongoose
-- **Authentication and Security**: JWT for authentication, bcryptjs for password hashing
+- **Reports & Dashboards**  
+  Real-time performance tracking using interactive charts (React ChartJS).
 
-### Additional Technologies
-- **Payment Integration**: Stripe API
-- **Deployment and Hosting**: Heroku for the backend, Firebase for the mobile app
-- **Project Management**: Trello or Kanban board
+- **Responsive UI**  
+  Designed for a smooth user experience on both desktop and mobile.
 
-## Installation
+## ⚙️ Tech Stack
 
-### Backend
-1. Clone the repository
-   ```bash
-   git clone https://github.com/yourusername/distributor-management-system.git
+- **Frontend:** React.js, HTML, CSS, JavaScript
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB (MongoDB Atlas)
+- **Caching:** Redis
+- **Authentication:** JWT
+- **Other Integrations:** OTP Service, Payment Gateway (e.g., Paystack)
+
+## 📐 Architecture
+
+User → React Frontend → Express API Gateway → MongoDB
+↘ Redis (Caching)
+↘ Background Worker (Async Tasks)
+
+markdown
+Copy
+Edit
+
+## 📊 Reports & Insights
+
+- Wallet transaction history
+- Distributor performance metrics (MTD, YTD)
+- Sales and order volume analytics
+- Export-ready customer statements
+
+## 🧪 Testing
+
+- Manual and automated testing with Postman, Jest, and Mocha
+- Auth, wallet, and performance flows tested end-to-end
+
+## 📦 Deployment
+
+- Frontend & Backend hosted on [your hosting service]
+- MongoDB Atlas for cloud database
+- Redis via [e.g., Redis Cloud or local]
+
+## 🎓 Lessons Learned
+
+- JWT and OTP authentication flows
+- Optimizing large MongoDB queries with Redis caching
+- Real-time dashboard design and performance metrics
+- API integration and secure payment workflows
+
+## 📹 Demo Video
+
+Watch the full walkthrough: [Link to YouTube or upload a hosted video]
+
+---
+
+## 📞 Contact
+
+Ngozi Robertson Agomuonso  
+[Your LinkedIn] | [Your Email] | [Your Portfolio (if any)]
